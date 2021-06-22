@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Module specificationVersion="2.0">
+<ModulePrefs title="Generatore ID" height="190" scrolling="true">
+	<Optional feature="com.ibm.rdm.rm.api"/>
+	<!--<Require feature="dynamic-height"/>-->
+</ModulePrefs>
+<Content type="html">
+	<![CDATA[
+		<html>
+			<head>
+				<script src="//code.jquery.com/jquery-3.6.0.js"></script>
+				<script src="js/id.js"></script>
+				<link rel="stylesheet" type="text/css" href="css/id.css">
+			</head>
+			<body>
+				<div id="intro" class="info"></div>
+				<button id="SetID">Aggiorna gli identificativi</button>
+				<br/>
+				<hr style="height:1pt; visibility:hidden;" />
+				<button id="RemoveID">Cancella tutti gli identificativi</button>
+   				<br/>
+				<div id="progress" class="info"></div>
+				<div id="progress2" class="info"></div>
+			</body>
+		</html>
+	]]>
+</Content>
+</Module>

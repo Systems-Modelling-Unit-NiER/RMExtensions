@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Module specificationVersion="2.0">
+<ModulePrefs title="Compilatore Stati" height="250" scrolling="true">
+	<Optional feature="com.ibm.rdm.rm.api"/>
+	<!--<Require feature="dynamic-height"/>-->
+</ModulePrefs>
+<Content type="html">
+	<![CDATA[
+		<html>
+			<head>
+				<script src="//code.jquery.com/jquery-3.6.0.js"></script>
+				<script src="js/workflow.js"></script>
+				<link rel="stylesheet" type="text/css" href="css/workflow.css">
+			</head>
+			<body>
+				<div id="intro" class="info"></div>
+				<button id="SetStatus">Aggiorna gli stati</button>
+				<br/>
+				<input type="checkbox" id="steps" name="steps" value="steps" checked>
+  				<label for="steps"> Aggiorna anche gli stati dei moduli collegati</label><br>
+   				<br/>
+				<div id="result" class="info"></div>
+			</body>
+		</html>
+	]]>
+</Content>
+</Module>

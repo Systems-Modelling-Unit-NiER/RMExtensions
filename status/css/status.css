@@ -1,0 +1,31 @@
+
+body 
+{
+	font-family: "Arial";
+	padding: 5px;
+	font-size: 12px;
+}
+
+.action
+{
+	text-decoration: underline;
+	cursor: pointer;
+	color: blue;
+} 
+
+.label
+{
+	color: black;
+	font-weight: bold;
+} 
+
+.value
+{
+	color: black;
+	font-weight: normal;
+} 
+
+.log
+{
+
+} 

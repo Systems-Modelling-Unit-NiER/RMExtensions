@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ Licensed Materials - Property of IBM
+ import-repair.xml
+© Copyright IBM Corporation 2014
+
+U.S. Government Users Restricted Rights:  Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp. 
+-->
+<Module specificationVersion="2.0">
+<ModulePrefs title="Workflow automatico" height="100" scrolling="true">
+	<Optional feature="com.ibm.rdm.rm.api"/>
+	<Require feature="dynamic-height"/>
+</ModulePrefs>
+<Content type="html">
+	<![CDATA[
+		<html>
+			<head>
+				<script src="//code.jquery.com/jquery-3.6.0.js"></script>
+				<script src="js/status.js"></script>
+				<link rel="stylesheet" type="text/css" href="css/status.css">
+			</head>
+			<body>
+				<div id="log">Aggiornamento automatico del workflow attivato</div>	
+			</body>
+		</html>
+	]]>
+</Content>
+</Module>
