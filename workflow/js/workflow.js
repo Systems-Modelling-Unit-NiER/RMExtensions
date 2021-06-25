@@ -3,14 +3,13 @@ var initialize = true;
 
 function version()
 {
-	window.alert("prova 8");
+	window.alert("prova 9");
 	initialize=false;
 }
 
-function println(string, element, id = null) {
+function println(string,element) {
 	var p = document.createElement("p");
 	p.innerHTML = string;
-	if (id != null) p.id = id;
 	$(p).appendTo("#"+element);
 };
 
@@ -27,10 +26,13 @@ function indexArtifact(/*RM.ArtifactRef[]*/ refs, /*RM.ArtifactRef*/ ref) {
 	}
 };
 
+var equal = "";
+var toSave = [];
 var numChanged = 0;
 var idChanged = [];
 var urlChanged = [];
 var type = "";
+var modified = "";
 var steps = true;
 
 function isequal(string)
@@ -50,10 +52,8 @@ function updateStatus(item,string)
 	toSave.push(item);
 }
 
-function updateReqStatus(item, hzid = null, cmid = null)
+function updateReqStatus(item)
 {
-	var equal = "";
-	var toSave = [];
 	return new Promise(resolve1 => {
 		if (type.startsWith("Requisito ")) {$("#result").empty(); println("Aggiornamento status requisito " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","result");}
 		else println("Aggiornamento status requisiti...","result");
@@ -94,26 +94,23 @@ function updateReqStatus(item, hzid = null, cmid = null)
 					RM.Data.setAttributes(toSave, function(result2){
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
-							window.alert("Error for req. " + item.values[RM.Data.Attributes.IDENTIFIER] + ": " + result2.code);
+							window.alert("Error: " + result2.code);
 						}
 						finalstate = item.values["State (Workflow " + item.values[RM.Data.Attributes.ARTIFACT_TYPE].name + ")"];
 						toSave = [];
 						resolve1(finalstate);
 					});
 				}
-				else
-				{
-					resolve1(finalstate);
-				}
+				else resolve1(finalstate);
+				//println("Completato","result");
+				//window.alert("resolved");
 			});
 		});
 	});
 }
 
-async function updateCmStatus(item, hzid = null)
+async function updateCmStatus(item)
 {
-	var equal = "";
-	var toSave = [];
 	return new Promise(resolve2 => {
 		var linkedStat = [];
 		if (type == "Contromisura") {$("#result").empty(); println("Aggiornamento status contromisura " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","result");}
@@ -161,17 +158,14 @@ async function updateCmStatus(item, hzid = null)
 					RM.Data.setAttributes(toSave, function(result2){
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
-							window.alert("Error for cm. " + item.values[RM.Data.Attributes.IDENTIFIER] + ": " + result2.code);
+							window.alert("Error: " + result2.code);
 						}
 						toSave = [];
 						finalstate = item.values["State (Workflow Contromisura)"];
 						resolve2(finalstate);
 					});
 				}
-				else
-				{
-					resolve2(finalstate);
-				}
+				else resolve2(finalstate);
 				//println("Completato","result");
 				//window.alert("resolved");
 			});
@@ -181,8 +175,6 @@ async function updateCmStatus(item, hzid = null)
 
 async function updateHzStatus(item)
 {
-	var equal = "";
-	var toSave = [];
 	return new Promise(resolve3 => {
 		var linkedStat = [];
 		$("#result").empty();
@@ -229,17 +221,14 @@ async function updateHzStatus(item)
 					RM.Data.setAttributes(toSave, function(result2){
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
-							window.alert("Error for hz. " + item.values[RM.Data.Attributes.IDENTIFIER] + ": " + result2.code);
+							window.alert("Error: " + result2.code);
 						}
 						toSave = [];
 						finalstate = item.values["State (Workflow Hazard)"];
 						resolve3(finalstate);
 					});
 				}
-				else
-				{
-					resolve3(finalstate);
-				}
+				else resolve3(finalstate);
 				//println("Completato","result");
 				//window.alert("resolved");
 			});
@@ -273,7 +262,7 @@ $(async function()
 		else steps = false;
 		//window.alert(steps);
 		RM.Data.getContentsAttributes(selection, stati.concat([RM.Data.Attributes.ARTIFACT_TYPE,RM.Data.Attributes.IDENTIFIER]), async function(result1){
-			//missingArtifacts = result1.data.length;
+			//window.alert(result1.data.length);
 			for(item of result1.data)
 			{
 				type = item.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
