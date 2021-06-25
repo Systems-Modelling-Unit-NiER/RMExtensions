@@ -124,7 +124,6 @@ function updateReqStatus(item, hzid = null, cmid = null)
 					if (missingArtifacts <= 0) writeResults();
 					resolve1(finalstate);
 				}
-				if (missingArtifacts <= 0) writeResults();
 			});
 		});
 	});
