@@ -17,7 +17,7 @@
 				<div id="intro" class="info"></div>
 				<button id="SetStatus">Aggiorna gli stati</button>
 				<br/>
-				<input type="checkbox" id="steps" name="steps" value="steps" checked>
+				<input type="checkbox" id="steps" name="steps" value="steps">
   				<label for="steps"> Aggiorna anche gli stati dei moduli collegati</label><br>
    				<br/>
 				<div id="result" class="info"></div>
