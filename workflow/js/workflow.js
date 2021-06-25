@@ -27,13 +27,10 @@ function indexArtifact(/*RM.ArtifactRef[]*/ refs, /*RM.ArtifactRef*/ ref) {
 	}
 };
 
-var equal = "";
-var toSave = [];
 var numChanged = 0;
 var idChanged = [];
 var urlChanged = [];
 var type = "";
-var modified = "";
 var steps = true;
 var missingArtifacts = 0;
 
@@ -69,6 +66,8 @@ function writeResults()
 
 function updateReqStatus(item, hzid = null, cmid = null)
 {
+	var equal = "";
+	var toSave = [];
 	return new Promise(resolve1 => {
 		if (type.startsWith("Requisito ")) {$("#result").empty(); println("Aggiornamento status requisito " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","result");}
 		else println("Aggiornamento status requisiti...","result");
@@ -131,6 +130,8 @@ function updateReqStatus(item, hzid = null, cmid = null)
 
 async function updateCmStatus(item, hzid = null)
 {
+	var equal = "";
+	var toSave = [];
 	return new Promise(resolve2 => {
 		var linkedStat = [];
 		if (type == "Contromisura") {$("#result").empty(); println("Aggiornamento status contromisura " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","result");}
@@ -202,6 +203,8 @@ async function updateCmStatus(item, hzid = null)
 
 async function updateHzStatus(item)
 {
+	var equal = "";
+	var toSave = [];
 	return new Promise(resolve3 => {
 		var linkedStat = [];
 		$("#result").empty();
