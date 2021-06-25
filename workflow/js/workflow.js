@@ -3,7 +3,7 @@ var initialize = true;
 
 function version()
 {
-	window.alert("prova 7");
+	window.alert("prova 8");
 	initialize=false;
 }
 
@@ -32,7 +32,6 @@ var idChanged = [];
 var urlChanged = [];
 var type = "";
 var steps = true;
-var missingArtifacts = 0;
 
 function isequal(string)
 {
@@ -49,19 +48,6 @@ function updateStatus(item,string)
 	idChanged.push(parseInt(item.values[RM.Data.Attributes.IDENTIFIER]));
 	urlChanged.push(item.ref.toUri());
 	toSave.push(item);
-}
-
-function writeResults()
-{
-	var i;
-	var modified = "";
-	for(i=0;i<idChanged.length;i++)
-	{
-		modified = modified + "</br><a href=\"" + urlChanged[i] + "\" target=\"_blank\">" + idChanged[i] + "</a>";
-	}
-	$("#result").empty();
-	println("I seguenti " + numChanged + " artefatti sono stati aggiornati:" + modified,"result");
-	//window.alert(toSave.length);
 }
 
 function updateReqStatus(item, hzid = null, cmid = null)
@@ -112,15 +98,11 @@ function updateReqStatus(item, hzid = null, cmid = null)
 						}
 						finalstate = item.values["State (Workflow " + item.values[RM.Data.Attributes.ARTIFACT_TYPE].name + ")"];
 						toSave = [];
-						if (type.startsWith("Requisito ")) --missingArtifacts;
-						if (missingArtifacts <= 0) writeResults();
 						resolve1(finalstate);
 					});
 				}
 				else
 				{
-					if (type.startsWith("Requisito ")) --missingArtifacts;
-					if (missingArtifacts <= 0) writeResults();
 					resolve1(finalstate);
 				}
 			});
@@ -183,15 +165,11 @@ async function updateCmStatus(item, hzid = null)
 						}
 						toSave = [];
 						finalstate = item.values["State (Workflow Contromisura)"];
-						if (type == "Contromisura") --missingArtifacts;
-						if (missingArtifacts <= 0) writeResults();
 						resolve2(finalstate);
 					});
 				}
 				else
 				{
-					if (type == "Contromisura") --missingArtifacts;
-					if (missingArtifacts <= 0) writeResults();
 					resolve2(finalstate);
 				}
 				//println("Completato","result");
@@ -255,15 +233,11 @@ async function updateHzStatus(item)
 						}
 						toSave = [];
 						finalstate = item.values["State (Workflow Hazard)"];
-						if (type.startsWith("Hazard ")) --missingArtifacts;
-						if (missingArtifacts <= 0) writeResults();
 						resolve3(finalstate);
 					});
 				}
 				else
 				{
-					if (type.startsWith("Hazard ")) --missingArtifacts;
-					if (missingArtifacts <= 0) writeResults();
 					resolve3(finalstate);
 				}
 				//println("Completato","result");
@@ -299,25 +273,34 @@ $(async function()
 		else steps = false;
 		//window.alert(steps);
 		RM.Data.getContentsAttributes(selection, stati.concat([RM.Data.Attributes.ARTIFACT_TYPE,RM.Data.Attributes.IDENTIFIER]), async function(result1){
-			missingArtifacts = result1.data.length;
+			//missingArtifacts = result1.data.length;
 			for(item of result1.data)
 			{
 				type = item.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
 				//window.alert("Tipo :" + type);
 				if (type.startsWith("Requisito ") && type != "Requisito input")
 				{
-					updateReqStatus(item);
+					await updateReqStatus(item);
 				}
 				else if (type == "Contromisura")
 				{
-					updateCmStatus(item);
+					await updateCmStatus(item);
 				}
 				else if (type.startsWith("Hazard "))
 				{
-					updateHzStatus(item);
+					await updateHzStatus(item);
 				}
 				//window.alert("loop");
 			}
+			var i;
+			var modified = "";
+			for(i=0;i<idChanged.length;i++)
+			{
+				modified = modified + "</br><a href=\"" + urlChanged[i] + "\" target=\"_blank\">" + idChanged[i] + "</a>";
+			}
+			$("#result").empty();
+			println("I seguenti " + numChanged + " artefatti sono stati aggiornati:" + modified,"result");
+			//window.alert(toSave.length);
 		});
 	});
 });
