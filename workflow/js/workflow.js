@@ -306,7 +306,10 @@ $(async function()
 			{
 				modified = modified.replaceAll(idChanged[i],"<mark>" + idChanged[i] + "</mark>");
 			}
+			$("#updates").empty();
 			println("In evidenza gli artefatti modificati (" + numChanged + "):","updates");
+			$("#tabResults").empty();
+			println(modified,"tabResults");
 			//window.alert(toSave.length);
 		});
 	});
