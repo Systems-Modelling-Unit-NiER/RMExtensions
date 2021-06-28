@@ -20,7 +20,7 @@
   				<label for="steps"> Aggiorna anche gli stati dei moduli collegati</label><br>
    				<br/>
 				<div id="updates" class="info"></div>
-				<div id="tabResults" class="info"></div>
+				<table id="tabResults" class="table"></table>
 				<script src="js/workflow.js"></script>
 			</body>
 		</html>
