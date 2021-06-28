@@ -29,11 +29,15 @@ function indexArtifact(/*RM.ArtifactRef[]*/ refs, /*RM.ArtifactRef*/ ref) {
 var equal = "";
 var toSave = [];
 var numChanged = 0;
+var typeChanged = [];
 var idChanged = [];
 var urlChanged = [];
 var type = "";
 var modified = "";
 var steps = true;
+let updates;
+let tabResults;
+var modified = "";
 
 function isequal(string)
 {
@@ -47,6 +51,7 @@ function updateStatus(item,string)
 	item.values["State (Workflow " + name + ")"] = string;
 	modified = string;
 	numChanged++;
+	typeChanged.push(item.values[RM.Data.Attributes.ARTIFACT_TYPE].name);
 	idChanged.push(parseInt(item.values[RM.Data.Attributes.IDENTIFIER]));
 	urlChanged.push(item.ref.toUri());
 	toSave.push(item);
@@ -55,8 +60,8 @@ function updateStatus(item,string)
 function updateReqStatus(item)
 {
 	return new Promise(resolve1 => {
-		if (type.startsWith("Requisito ")) {$("#result").empty(); println("Aggiornamento status requisito " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","result");}
-		else println("Aggiornamento status requisiti...","result");
+		if (type.startsWith("Requisito ")) updates.innerHTML = "Aggiornamento status requisito " + item.values[RM.Data.Attributes.IDENTIFIER] + "...";
+		updates.innerHTML += "Aggiornamento status requisiti...";
 		var linkedStat = [];
 		//window.alert("opening: " + item.values[RM.Data.Attributes.IDENTIFIER]);
 		RM.Data.getLinkedArtifacts(item.ref, function(linksResult) {
@@ -90,11 +95,11 @@ function updateReqStatus(item)
 				finalstate = item.values["State (Workflow " + item.values[RM.Data.Attributes.ARTIFACT_TYPE].name + ")"];
 				if (toSave.length > 0)
 				{
-					println("Salvataggio in corso...","result");
+					updates.innerHTML += "Salvataggio in corso...";
 					RM.Data.setAttributes(toSave, function(result2){
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
-							window.alert("Error req " + item.values[RM.Data.Attributes.IDENTIFIER] + " :" + result2.code);
+							window.alert("Error req " + item.values[RM.Data.Attributes.IDENTIFIER] + ": " + result2.code);
 						}
 						finalstate = item.values["State (Workflow " + item.values[RM.Data.Attributes.ARTIFACT_TYPE].name + ")"];
 						toSave = [];
@@ -102,6 +107,7 @@ function updateReqStatus(item)
 					});
 				}
 				else resolve1(finalstate);
+				modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 				//println("Completato","result");
 				//window.alert("resolved");
 			});
@@ -113,8 +119,8 @@ async function updateCmStatus(item)
 {
 	return new Promise(resolve2 => {
 		var linkedStat = [];
-		if (type == "Contromisura") {$("#result").empty(); println("Aggiornamento status contromisura " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","result");}
-		else println("Aggiornamento status contromisure...","result");
+		if (type == "Contromisura") updates.innerHTML = "Aggiornamento status contromisura " + item.values[RM.Data.Attributes.IDENTIFIER] + "...";
+		else updates.innerHTML += "Aggiornamento status contromisure...";
 		//window.alert("opening: " + item.values[RM.Data.Attributes.IDENTIFIER]);
 		RM.Data.getLinkedArtifacts(item.ref, async function(linksResult) {
 			var artifactIndex = [];
@@ -124,7 +130,11 @@ async function updateCmStatus(item)
 				});
 			});
 			//window.alert("link number: " + artifactIndex.length);
-			if(artifactIndex.length == 0) resolve2();
+			if(artifactIndex.length == 0)
+			{
+				if($("#steps").prop('checked')) modified = modified + "<td></td><td></td>";
+				resolve2();
+			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE,"State (Workflow Requisito sistema)","State (Workflow Requisito sottosistema)","State (Workflow Requisito software)","State (Workflow Requisito hardware)"], async function(attrResult) {
 				//window.alert("length: " + attrResult.data.length);
 				for(item2 of attrResult.data)
@@ -154,11 +164,11 @@ async function updateCmStatus(item)
 				finalstate = item.values["State (Workflow Contromisura)"];
 				if (toSave.length > 0)
 				{
-					println("Salvataggio in corso...","result");
+					updates.innerHTML += "Salvataggio in corso...";
 					RM.Data.setAttributes(toSave, function(result2){
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
-							window.alert("Error cm " + item.values[RM.Data.Attributes.IDENTIFIER] + " :" + result2.code);
+							window.alert("Error cm " + item.values[RM.Data.Attributes.IDENTIFIER] + ": " + result2.code);
 						}
 						toSave = [];
 						finalstate = item.values["State (Workflow Contromisura)"];
@@ -166,6 +176,7 @@ async function updateCmStatus(item)
 					});
 				}
 				else resolve2(finalstate);
+				modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 				//println("Completato","result");
 				//window.alert("resolved");
 			});
@@ -176,9 +187,9 @@ async function updateCmStatus(item)
 async function updateHzStatus(item)
 {
 	return new Promise(resolve3 => {
+		updates.innerHTML = "Aggiornamento status hazard " + item.values[RM.Data.Attributes.IDENTIFIER] + "...";
 		var linkedStat = [];
 		$("#result").empty();
-		println("Aggiornamento status hazard " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","result");
 		//window.alert("opening: " + item.values[RM.Data.Attributes.IDENTIFIER]);
 		RM.Data.getLinkedArtifacts(item.ref, async function(linksResult) {
 			var artifactIndex = [];
@@ -187,7 +198,11 @@ async function updateHzStatus(item)
 				indexArtifact(artifactIndex, ref);
 				});
 			});
-			if(artifactIndex.length == 0) resolve3();
+			if(artifactIndex.length == 0)
+			{
+                if($("#steps").prop('checked')) modified = modified + "<td></td><td></td>"
+				resolve3();
+			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE, "State (Workflow Contromisura)"], async function(attrResult) {
 				for(item2 of attrResult.data)
 				{
@@ -212,16 +227,15 @@ async function updateHzStatus(item)
 					//window.alert("Risolto");
 					updateStatus(item,"Risolto");
 				}
-				println("Completato","result");
 				var finalstate = "";
 				finalstate = item.values["State (Workflow Hazard)"];
 				if (toSave.length > 0)
 				{
-					println("Salvataggio in corso...","result");
+					updates.innerHTML += "Salvataggio in corso...";
 					RM.Data.setAttributes(toSave, function(result2){
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
-							window.alert("Error hz " + item.values[RM.Data.Attributes.IDENTIFIER] + " :" + result2.code);
+							window.alert("Error hz " + item.values[RM.Data.Attributes.IDENTIFIER] + ": " + result2.code);
 						}
 						toSave = [];
 						finalstate = item.values["State (Workflow Hazard)"];
@@ -229,6 +243,7 @@ async function updateHzStatus(item)
 					});
 				}
 				else resolve3(finalstate);
+				modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 				//println("Completato","result");
 				//window.alert("resolved");
 			});
@@ -256,6 +271,11 @@ $(async function()
 			});
 		});
 	});
+
+	updates = document.createElement("p");
+	$(updates).appendTo("#results");
+	tabResults = document.createElement("table");
+	$(tabResults).appendTo("#results");
 	
 	$("#SetStatus").on("click", async function() {
 		if($("#steps").prop('checked')) steps = true;
@@ -263,9 +283,16 @@ $(async function()
 		//window.alert(steps);
 		RM.Data.getContentsAttributes(selection, stati.concat([RM.Data.Attributes.ARTIFACT_TYPE,RM.Data.Attributes.IDENTIFIER]), async function(result1){
 			//window.alert(result1.data.length);
+			var i;
+			if($("#steps").prop('checked') && type.startsWith("Hazard ")) modified = "<thead><tr><td>Hazard</td><td>Contromisure</td><td>Requisiti</td></thead><tbody><tr>";
+			else if ($("#steps").prop('checked') && type == "Contromisura") modified = "<thead><tr><td>Contromisure</td><td>Requisiti</td></thead><tbody><tr>";
+			else if (type.startsWith("Requisito ")) modified = "<thead><tr><td>Requisiti</td></thead><tbody><tr>";
+			else if (type == "Contromisura") modified = "<thead><tr><td>Contromisure</td></thead><tbody><tr>";
+			else if (type.startsWith("Hazard ")) modified = "<thead><tr><td>Hazard</td></thead><tbody><tr>";
 			for(item of result1.data)
 			{
 				type = item.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
+				modified = modified.replace("</tr></tbody></table>","</tr><tr>");
 				//window.alert("Tipo :" + type);
 				if (type.startsWith("Requisito ") && type != "Requisito input")
 				{
@@ -279,16 +306,15 @@ $(async function()
 				{
 					await updateHzStatus(item);
 				}
+				modified =  modified + "</tr></tbody>";
 				//window.alert("loop");
+				tabResults.innerHTML = modified;
 			}
-			var i;
-			var modified = "";
 			for(i=0;i<idChanged.length;i++)
 			{
-				modified = modified + "</br><a href=\"" + urlChanged[i] + "\" target=\"_blank\">" + idChanged[i] + "</a>";
+				modified = modified.replaceAll(idChanged[i],"<mark>" + idChanged[i] + "</mark>");
 			}
-			$("#result").empty();
-			println("I seguenti " + numChanged + " artefatti sono stati aggiornati:" + modified,"result");
+			updates.innerHTML = "In evidenza gli artefatti modificati (" + numChanged + "):","result";
 			//window.alert(toSave.length);
 		});
 	});
