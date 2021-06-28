@@ -94,7 +94,7 @@ function updateReqStatus(item)
 					RM.Data.setAttributes(toSave, function(result2){
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
-							window.alert("Error: " + result2.code);
+							window.alert("Error req " + item.values[RM.Data.Attributes.IDENTIFIER] + " :" + result2.code);
 						}
 						finalstate = item.values["State (Workflow " + item.values[RM.Data.Attributes.ARTIFACT_TYPE].name + ")"];
 						toSave = [];
@@ -158,7 +158,7 @@ async function updateCmStatus(item)
 					RM.Data.setAttributes(toSave, function(result2){
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
-							window.alert("Error: " + result2.code);
+							window.alert("Error cm " + item.values[RM.Data.Attributes.IDENTIFIER] + " :" + result2.code);
 						}
 						toSave = [];
 						finalstate = item.values["State (Workflow Contromisura)"];
@@ -221,7 +221,7 @@ async function updateHzStatus(item)
 					RM.Data.setAttributes(toSave, function(result2){
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
-							window.alert("Error: " + result2.code);
+							window.alert("Error hz " + item.values[RM.Data.Attributes.IDENTIFIER] + " :" + result2.code);
 						}
 						toSave = [];
 						finalstate = item.values["State (Workflow Hazard)"];
@@ -238,7 +238,7 @@ async function updateHzStatus(item)
 
 $(async function()
 {
-	if (initialize==true) version();
+	//if (initialize==true) version();
 	var selection = [];
 	var docName = "";
 	println("Entrare in un modulo per aggiornare gli status","intro");
