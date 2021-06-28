@@ -3,7 +3,7 @@ var initialize = true;
 
 function version()
 {
-	window.alert("prova 10");
+	window.alert("prova 12");
 	initialize=false;
 }
 
@@ -133,7 +133,7 @@ async function updateCmStatus(item)
 			//window.alert("link number: " + artifactIndex.length);
 			if(artifactIndex.length == 0)
 			{
-				if($("#steps").prop('checked')) modified = modified + "<td></td><td></td>";
+				if($("#steps").prop('checked')) modified = modified + "<td></td>";
 				resolve2();
 			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE,"State (Workflow Requisito sistema)","State (Workflow Requisito sottosistema)","State (Workflow Requisito software)","State (Workflow Requisito hardware)"], async function(attrResult) {
@@ -190,7 +190,6 @@ async function updateHzStatus(item)
 	return new Promise(resolve3 => {
 		updates.innerHTML = "Aggiornamento status hazard " + item.values[RM.Data.Attributes.IDENTIFIER] + "...";
 		var linkedStat = [];
-		$("#result").empty();
 		//window.alert("opening: " + item.values[RM.Data.Attributes.IDENTIFIER]);
 		RM.Data.getLinkedArtifacts(item.ref, async function(linksResult) {
 			var artifactIndex = [];
@@ -259,7 +258,6 @@ $(async function()
 	var docName = "";
 	println("Entrare in un modulo per aggiornare gli status","intro");
 	RM.Event.subscribe(RM.Event.ARTIFACT_OPENED, function(selected) {
-		$("#result").empty();
 		selection = selected;
 		RM.Data.getAttributes(selection, [RM.Data.Attributes.NAME,RM.Data.Attributes.FORMAT], function(result){			
 			result.data.forEach(function(item){
@@ -293,7 +291,7 @@ $(async function()
 			for(item of result1.data)
 			{
 				type = item.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
-				modified = modified.replace("</tr></tbody></table>","</tr><tr>");
+				modified = modified.replace("</tr></tbody>","</tr><tr>");
 				//window.alert("Tipo :" + type);
 				if (type.startsWith("Requisito ") && type != "Requisito input")
 				{
@@ -308,7 +306,7 @@ $(async function()
 					await updateHzStatus(item);
 				}
 				modified =  modified + "</tr></tbody>";
-				//window.alert("loop");
+				console.log(document.documentElement.innerHTML);
 				tabResults.innerHTML = modified;
 			}
 			for(i=0;i<idChanged.length;i++)
