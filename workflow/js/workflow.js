@@ -253,7 +253,7 @@ async function updateHzStatus(item)
 
 $(async function()
 {
-	if (initialize==true) version();
+	//if (initialize==true) version();
 	var selection = [];
 	var docName = "";
 	println("Entrare in un modulo per aggiornare gli status","intro");
