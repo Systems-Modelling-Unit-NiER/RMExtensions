@@ -19,7 +19,9 @@
 				<input type="checkbox" id="steps" name="steps" value="steps">
   				<label for="steps"> Aggiorna anche gli stati dei moduli collegati</label><br>
    				<br/>
-				<div id="result" class="info"></div>
+				<div id="updates" class="info"></div>
+				<br/>
+				<div id="tabResults" class="info"></div>
 				<script src="js/workflow.js"></script>
 			</body>
 		</html>
