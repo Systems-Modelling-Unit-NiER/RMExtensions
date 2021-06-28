@@ -3,7 +3,7 @@ var initialize = true;
 
 function version()
 {
-	window.alert("prova 9");
+	window.alert("prova 10");
 	initialize=false;
 }
 
@@ -37,7 +37,6 @@ var modified = "";
 var steps = true;
 let updates;
 let tabResults;
-var modified = "";
 
 function isequal(string)
 {
@@ -48,13 +47,15 @@ function updateStatus(item,string)
 {
 	var name = item.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
 	if (name.startsWith("Hazard ")) name = "Hazard";
-	item.values["State (Workflow " + name + ")"] = string;
-	modified = string;
-	numChanged++;
-	typeChanged.push(item.values[RM.Data.Attributes.ARTIFACT_TYPE].name);
-	idChanged.push(parseInt(item.values[RM.Data.Attributes.IDENTIFIER]));
-	urlChanged.push(item.ref.toUri());
-	toSave.push(item);
+	if (item.values["State (Workflow " + name + ")"] != string)
+	{
+		item.values["State (Workflow " + name + ")"] = string;
+		numChanged++;
+		typeChanged.push(item.values[RM.Data.Attributes.ARTIFACT_TYPE].name);
+		idChanged.push(parseInt(item.values[RM.Data.Attributes.IDENTIFIER]));
+		urlChanged.push(item.ref.toUri());
+		toSave.push(item);
+	}
 }
 
 function updateReqStatus(item)
@@ -253,7 +254,7 @@ async function updateHzStatus(item)
 
 $(async function()
 {
-	//if (initialize==true) version();
+	if (initialize==true) version();
 	var selection = [];
 	var docName = "";
 	println("Entrare in un modulo per aggiornare gli status","intro");
