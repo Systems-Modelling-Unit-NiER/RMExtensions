@@ -35,8 +35,6 @@ var urlChanged = [];
 var type = "";
 var modified = "";
 var steps = true;
-let updates;
-let tabResults;
 
 function isequal(string)
 {
@@ -61,8 +59,8 @@ function updateStatus(item,string)
 function updateReqStatus(item)
 {
 	return new Promise(resolve1 => {
-		if (type.startsWith("Requisito ")) updates.innerHTML = "Aggiornamento status requisito " + item.values[RM.Data.Attributes.IDENTIFIER] + "...";
-		updates.innerHTML += "Aggiornamento status requisiti...";
+		if (type.startsWith("Requisito ")) {$("#updates").empty(); println("Aggiornamento status requisito " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","updates");}
+		else println("Aggiornamento status requisiti...","updates");
 		var linkedStat = [];
 		//window.alert("opening: " + item.values[RM.Data.Attributes.IDENTIFIER]);
 		RM.Data.getLinkedArtifacts(item.ref, function(linksResult) {
@@ -96,7 +94,7 @@ function updateReqStatus(item)
 				finalstate = item.values["State (Workflow " + item.values[RM.Data.Attributes.ARTIFACT_TYPE].name + ")"];
 				if (toSave.length > 0)
 				{
-					updates.innerHTML += "Salvataggio in corso...";
+					println("Salvataggio in corso...","updates");
 					RM.Data.setAttributes(toSave, function(result2){
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
@@ -120,8 +118,8 @@ async function updateCmStatus(item)
 {
 	return new Promise(resolve2 => {
 		var linkedStat = [];
-		if (type == "Contromisura") updates.innerHTML = "Aggiornamento status contromisura " + item.values[RM.Data.Attributes.IDENTIFIER] + "...";
-		else updates.innerHTML += "Aggiornamento status contromisure...";
+		if (type == "Contromisura") {$("#updates").empty(); println("Aggiornamento status contromisura " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","updates");}
+		else println("Aggiornamento status contromisure...","updates");
 		//window.alert("opening: " + item.values[RM.Data.Attributes.IDENTIFIER]);
 		RM.Data.getLinkedArtifacts(item.ref, async function(linksResult) {
 			var artifactIndex = [];
@@ -165,7 +163,7 @@ async function updateCmStatus(item)
 				finalstate = item.values["State (Workflow Contromisura)"];
 				if (toSave.length > 0)
 				{
-					updates.innerHTML += "Salvataggio in corso...";
+					println("Salvataggio in corso...","updates");
 					RM.Data.setAttributes(toSave, function(result2){
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
@@ -188,7 +186,7 @@ async function updateCmStatus(item)
 async function updateHzStatus(item)
 {
 	return new Promise(resolve3 => {
-		updates.innerHTML = "Aggiornamento status hazard " + item.values[RM.Data.Attributes.IDENTIFIER] + "...";
+		println("Aggiornamento status hazard " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","updates");
 		var linkedStat = [];
 		//window.alert("opening: " + item.values[RM.Data.Attributes.IDENTIFIER]);
 		RM.Data.getLinkedArtifacts(item.ref, async function(linksResult) {
@@ -231,7 +229,7 @@ async function updateHzStatus(item)
 				finalstate = item.values["State (Workflow Hazard)"];
 				if (toSave.length > 0)
 				{
-					updates.innerHTML += "Salvataggio in corso...";
+					println("Salvataggio in corso...","updates");
 					RM.Data.setAttributes(toSave, function(result2){
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
@@ -270,11 +268,6 @@ $(async function()
 			});
 		});
 	});
-
-	updates = document.createElement("p");
-	$(updates).appendTo("#results");
-	tabResults = document.createElement("table");
-	$(tabResults).appendTo("#results");
 	
 	$("#SetStatus").on("click", async function() {
 		if($("#steps").prop('checked')) steps = true;
@@ -306,14 +299,14 @@ $(async function()
 					await updateHzStatus(item);
 				}
 				modified =  modified + "</tr></tbody>";
-				console.log(document.documentElement.innerHTML);
-				tabResults.innerHTML = modified;
+				$("#tabResults").empty();
+				println(modified,"tabResults");
 			}
 			for(i=0;i<idChanged.length;i++)
 			{
 				modified = modified.replaceAll(idChanged[i],"<mark>" + idChanged[i] + "</mark>");
 			}
-			updates.innerHTML = "In evidenza gli artefatti modificati (" + numChanged + "):","result";
+			println("In evidenza gli artefatti modificati (" + numChanged + "):","updates");
 			//window.alert(toSave.length);
 		});
 	});
