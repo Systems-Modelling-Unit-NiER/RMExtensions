@@ -31,6 +31,7 @@ var toSave = [];
 var numChanged = 0;
 var typeChanged = [];
 var idChanged = [];
+var idError = [];
 var urlChanged = [];
 var type = "";
 var modified = "";
@@ -71,7 +72,12 @@ function updateReqStatus(item)
 				});
 			});
 			//window.alert("link number: " + artifactIndex.length);
-			if(artifactIndex.length == 0) resolve1();
+			if(artifactIndex.length == 0)
+			{
+				if($("#steps").prop('checked')) modified = modified + "<td></td><td></td><td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
+                else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
+				resolve1();
+			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE,"Esito"], function(attrResult) {
 				//window.alert("length: " + attrResult.data.length);
 				for(item2 of attrResult.data)
@@ -99,6 +105,7 @@ function updateReqStatus(item)
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
 							window.alert("Error req " + item.values[RM.Data.Attributes.IDENTIFIER] + ": " + result2.code);
+							idError.push(parseInt(item.values[RM.Data.Attributes.IDENTIFIER]));
 						}
 						finalstate = item.values["State (Workflow " + item.values[RM.Data.Attributes.ARTIFACT_TYPE].name + ")"];
 						toSave = [];
@@ -131,7 +138,8 @@ async function updateCmStatus(item)
 			//window.alert("link number: " + artifactIndex.length);
 			if(artifactIndex.length == 0)
 			{
-				if($("#steps").prop('checked')) modified = modified + "<td></td>";
+				if($("#steps").prop('checked')) modified = modified + "<td></td><td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td><td></td>";
+				else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
 				resolve2();
 			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE,"State (Workflow Requisito sistema)","State (Workflow Requisito sottosistema)","State (Workflow Requisito software)","State (Workflow Requisito hardware)"], async function(attrResult) {
@@ -168,6 +176,7 @@ async function updateCmStatus(item)
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
 							window.alert("Error cm " + item.values[RM.Data.Attributes.IDENTIFIER] + ": " + result2.code);
+							idError.push(parseInt(item.values[RM.Data.Attributes.IDENTIFIER]));
 						}
 						toSave = [];
 						finalstate = item.values["State (Workflow Contromisura)"];
@@ -186,6 +195,7 @@ async function updateCmStatus(item)
 async function updateHzStatus(item)
 {
 	return new Promise(resolve3 => {
+		$("#updates").empty();
 		println("Aggiornamento status hazard " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","updates");
 		var linkedStat = [];
 		//window.alert("opening: " + item.values[RM.Data.Attributes.IDENTIFIER]);
@@ -198,7 +208,8 @@ async function updateHzStatus(item)
 			});
 			if(artifactIndex.length == 0)
 			{
-                if($("#steps").prop('checked')) modified = modified + "<td></td><td></td>"
+                if($("#steps").prop('checked')) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td><td></td><td></td>"
+                else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
 				resolve3();
 			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE, "State (Workflow Contromisura)"], async function(attrResult) {
@@ -234,6 +245,7 @@ async function updateHzStatus(item)
 						if(result2.code !== RM.OperationResult.OPERATION_OK)
 						{
 							window.alert("Error hz " + item.values[RM.Data.Attributes.IDENTIFIER] + ": " + result2.code);
+							idError.push(parseInt(item.values[RM.Data.Attributes.IDENTIFIER]));
 						}
 						toSave = [];
 						finalstate = item.values["State (Workflow Hazard)"];
@@ -276,11 +288,11 @@ $(async function()
 		RM.Data.getContentsAttributes(selection, stati.concat([RM.Data.Attributes.ARTIFACT_TYPE,RM.Data.Attributes.IDENTIFIER]), async function(result1){
 			//window.alert(result1.data.length);
 			var i;
-			if($("#steps").prop('checked') && type.startsWith("Hazard ")) modified = "<thead><tr><td>Hazard</td><td>Contromisure</td><td>Requisiti</td></thead><tbody><tr>";
-			else if ($("#steps").prop('checked') && type == "Contromisura") modified = "<thead><tr><td>Contromisure</td><td>Requisiti</td></thead><tbody><tr>";
-			else if (type.startsWith("Requisito ")) modified = "<thead><tr><td>Requisiti</td></thead><tbody><tr>";
-			else if (type == "Contromisura") modified = "<thead><tr><td>Contromisure</td></thead><tbody><tr>";
-			else if (type.startsWith("Hazard ")) modified = "<thead><tr><td>Hazard</td></thead><tbody><tr>";
+			if($("#steps").prop('checked') && type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th><th>Contromisure</th><th>Requisiti</th></thead><tbody><tr>";
+			else if ($("#steps").prop('checked') && type == "Contromisura") modified = "<thead><tr><th>Contromisure</th><th>Requisiti</th></thead><tbody><tr>";
+			else if (type.startsWith("Requisito ")) modified = "<thead><tr><th>Requisiti</th></thead><tbody><tr>";
+			else if (type == "Contromisura") modified = "<thead><tr><th>Contromisure</th></thead><tbody><tr>";
+			else if (type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th></thead><tbody><tr>";
 			for(item of result1.data)
 			{
 				type = item.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
@@ -300,16 +312,22 @@ $(async function()
 				}
 				modified =  modified + "</tr></tbody>";
 				$("#tabResults").empty();
-				println(modified,"tabResults");
+				console.log(modified)
+				$("#tabResults").append(modified);
 			}
 			for(i=0;i<idChanged.length;i++)
 			{
 				modified = modified.replaceAll(idChanged[i],"<mark>" + idChanged[i] + "</mark>");
 			}
+			var numErrors = new Set(idError).size;
+			for(i=0;i<idError.length;i++)
+			{
+				modified = modified.replaceAll("<mark>" + idError[i] + "</mark>","<span style=\"background-color: #FF0000\">" + idError[i] + "</span>");
+			}
 			$("#updates").empty();
-			println("In evidenza gli artefatti modificati (" + numChanged + "):","updates");
+			println("In evidenza gli artefatti modificati (" + numChanged + ", with " + numErrors + " errors):","updates");
 			$("#tabResults").empty();
-			println(modified,"tabResults");
+			$("#tabResults").append(modified);
 			//window.alert(toSave.length);
 		});
 	});
