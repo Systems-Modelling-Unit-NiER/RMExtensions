@@ -288,7 +288,7 @@ $(async function()
 		RM.Data.getContentsAttributes(selection, stati.concat([RM.Data.Attributes.ARTIFACT_TYPE,RM.Data.Attributes.IDENTIFIER]), async function(result1){
 			//window.alert(result1.data.length);
 			var i;
-			if($("#steps").prop('checked') && type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th><th>Contromisure</th><th>Requisiti</th></thead><tbody><tr>";
+			if($("#steps").prop('checked') && type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th><th>Contromisure</th><th>Requisiti</th></thead><tbody><tr style=\"border-bottom:1px solid black\"><td colspan=\"100%\"></td></tr><tr>";
 			else if ($("#steps").prop('checked') && type == "Contromisura") modified = "<thead><tr><th>Contromisure</th><th>Requisiti</th></thead><tbody><tr>";
 			else if (type.startsWith("Requisito ")) modified = "<thead><tr><th>Requisiti</th></thead><tbody><tr>";
 			else if (type == "Contromisura") modified = "<thead><tr><th>Contromisure</th></thead><tbody><tr>";
@@ -310,7 +310,7 @@ $(async function()
 				{
 					await updateHzStatus(item);
 				}
-				modified =  modified + "</tr></tbody>";
+				modified =  modified + "</tr><tr style=\"border-bottom:1px solid black\"><td colspan=\"100%\"></td></tr></tbody>";
 				$("#tabResults").empty();
 				console.log(modified)
 				$("#tabResults").append(modified);
