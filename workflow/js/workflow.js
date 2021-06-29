@@ -155,10 +155,10 @@ async function updateCmStatus(item)
 						n++;
 						if(steps)
 						{
-							var saved = await updateReqStatus(item2);
-							linkedStat.push(saved);
 							if (n>1) modified = modified + "<tr><td></td><td></td>";
 							else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
+							var saved = await updateReqStatus(item2);
+							linkedStat.push(saved);
 						}
 						else linkedStat.push(item2.values["State (Workflow " + item2.values[RM.Data.Attributes.ARTIFACT_TYPE].name + ")"]);
 					}
