@@ -80,6 +80,7 @@ function updateReqStatus(item)
 			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE,"Esito"], function(attrResult) {
 				//window.alert("length: " + attrResult.data.length);
+				modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 				for(item2 of attrResult.data)
 				{
 					var linkedtype = item2.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
@@ -113,7 +114,6 @@ function updateReqStatus(item)
 					});
 				}
 				else resolve1(finalstate);
-				modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 				//println("Completato","result");
 				//window.alert("resolved");
 			});
@@ -153,6 +153,7 @@ async function updateCmStatus(item)
 					{
 						n++;
 						if (n>1) modified = modified + "<td></td>";
+						else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 						if(steps)
 						{
 							var saved = await updateReqStatus(item2);
@@ -187,7 +188,6 @@ async function updateCmStatus(item)
 					});
 				}
 				else resolve2(finalstate);
-				modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 				//println("Completato","result");
 				//window.alert("resolved");
 			});
@@ -224,6 +224,7 @@ async function updateHzStatus(item)
 					{
 						n++;
 						if (n>1) modified = modified + "<td></td>";
+						else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 						if(steps)
 						{
 							var saved = await updateCmStatus(item2);
@@ -259,7 +260,6 @@ async function updateHzStatus(item)
 					});
 				}
 				else resolve3(finalstate);
-				modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 				//println("Completato","result");
 				//window.alert("resolved");
 			});
@@ -269,6 +269,7 @@ async function updateHzStatus(item)
 
 $(async function()
 {
+	$("#tabResults").empty();
 	//if (initialize==true) version();
 	var selection = [];
 	var docName = "";
@@ -294,15 +295,19 @@ $(async function()
 		RM.Data.getContentsAttributes(selection, stati.concat([RM.Data.Attributes.ARTIFACT_TYPE,RM.Data.Attributes.IDENTIFIER]), async function(result1){
 			//window.alert(result1.data.length);
 			var i;
-			if($("#steps").prop('checked') && type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th><th>Contromisure</th><th>Requisiti</th></tr></thead><tbody><tr>";
-			else if ($("#steps").prop('checked') && type == "Contromisura") modified = "<thead><tr><th>Contromisure</th><th>Requisiti</th></tr></thead><tbody><tr>";
-			else if (type.startsWith("Requisito ")) modified = "<thead><tr><th>Requisiti</th></tr></thead><tbody><tr>";
-			else if (type == "Contromisura") modified = "<thead><tr><th>Contromisure</th></tr></thead><tbody><tr>";
-			else if (type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th></tr></thead><tbody><tr>";
 			for(item of result1.data)
 			{
 				type = item.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
+				if (modified === "")
+				{
+					if($("#steps").prop('checked') && type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th><th>Contromisure</th><th>Requisiti</th></tr></thead><tbody><tr>";
+					else if ($("#steps").prop('checked') && type == "Contromisura") modified = "<thead><tr><th>Contromisure</th><th>Requisiti</th></tr></thead><tbody><tr>";
+					else if (type.startsWith("Requisito ")) modified = "<thead><tr><th>Requisiti</th></tr></thead><tbody><tr>";
+					else if (type == "Contromisura") modified = "<thead><tr><th>Contromisure</th></tr></thead><tbody><tr>";
+					else if (type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th></tr></thead><tbody><tr>";
+				}
 				modified = modified.replace("</tr></tbody>","</tr><tr>");
+				console.log(modified)
 				//window.alert("Tipo :" + type);
 				if (type.startsWith("Requisito ") && type != "Requisito input")
 				{
@@ -320,6 +325,7 @@ $(async function()
 				$("#tabResults").empty();
 				console.log(modified)
 				$("#tabResults").append(modified);
+				break;
 			}
 			for(i=0;i<idChanged.length;i++)
 			{
