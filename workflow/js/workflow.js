@@ -34,8 +34,10 @@ var idChanged = [];
 var idError = [];
 var urlChanged = [];
 var type = "";
-var modified = "";
+
 var steps = true;
+var numEl = 0;
+var numTot;
 
 function isequal(string)
 {
@@ -60,8 +62,8 @@ function updateStatus(item,string)
 function updateReqStatus(item)
 {
 	return new Promise(resolve1 => {
-		if (type.startsWith("Requisito ")) {$("#updates").empty(); println("Aggiornamento status requisito " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","updates"); modified = modified + "<tr>";}
-		else println("Aggiornamento status requisiti...","updates");
+		if (type.startsWith("Requisito ")) {$("#updates").empty(); println("Esaminando requisito " + numEl + "/" + numTot + "...","updates"); modified = modified + "<tr>";}
+		//else println("Aggiornamento status requisiti...","updates");
 		var linkedStat = [];
 		//window.alert("opening: " + item.values[RM.Data.Attributes.IDENTIFIER]);
 		RM.Data.getLinkedArtifacts(item.ref, function(linksResult) {
@@ -125,8 +127,8 @@ async function updateCmStatus(item)
 {
 	return new Promise(resolve2 => {
 		var linkedStat = [];
-		if (type == "Contromisura") {$("#updates").empty(); println("Aggiornamento status contromisura " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","updates"); modified = modified + "<tr>";}
-		else println("Aggiornamento status contromisure...","updates");
+		if (type == "Contromisura") {$("#updates").empty(); println("Esaminando contromisura " + numEl + "/" + numTot + "...","updates"); modified = modified + "<tr>";}
+		//else println("Aggiornamento status contromisure...","updates");
 		//window.alert("opening: " + item.values[RM.Data.Attributes.IDENTIFIER]);
 		RM.Data.getLinkedArtifacts(item.ref, async function(linksResult) {
 			var artifactIndex = [];
@@ -200,7 +202,7 @@ async function updateHzStatus(item)
 {
 	return new Promise(resolve3 => {
 		$("#updates").empty();
-		println("Aggiornamento status hazard " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","updates");
+		println("Esaminando hazard " + numEl + "/" + numTot + "...","updates");
 		var linkedStat = [];
 		//window.alert("opening: " + item.values[RM.Data.Attributes.IDENTIFIER]);
 		RM.Data.getLinkedArtifacts(item.ref, async function(linksResult) {
@@ -291,14 +293,17 @@ $(async function()
 	});
 	
 	$("#SetStatus").on("click", async function() {
+		modified = "";
 		if($("#steps").prop('checked')) steps = true;
 		else steps = false;
 		//window.alert(steps);
 		RM.Data.getContentsAttributes(selection, stati.concat([RM.Data.Attributes.ARTIFACT_TYPE,RM.Data.Attributes.IDENTIFIER]), async function(result1){
 			//window.alert(result1.data.length);
 			var i;
+			numTot = result1.data.length;
 			for(item of result1.data)
 			{
+				numEl++;
 				type = item.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
 				if (modified === "")
 				{
@@ -338,7 +343,7 @@ $(async function()
 				modified = modified.replaceAll("<mark>" + idError[i] + "</mark>","<span style=\"background-color: #FF0000\">" + idError[i] + "</span>");
 			}
 			$("#updates").empty();
-			println("In evidenza gli artefatti modificati (" + numChanged + ", with " + numErrors + " errors):","updates");
+			println("In evidenza gli artefatti modificati (" + numChanged + ", con " + numErrors + " errori):","updates");
 			$("#tabResults").empty();
 			$("#tabResults").append(modified);
 			//window.alert(toSave.length);
