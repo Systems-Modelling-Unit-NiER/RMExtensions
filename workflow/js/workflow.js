@@ -138,7 +138,7 @@ async function updateCmStatus(item)
 			//window.alert("link number: " + artifactIndex.length);
 			if(artifactIndex.length == 0)
 			{
-				if($("#steps").prop('checked')) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td><td></td>";
+				if($("#steps").prop('checked')) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
 				else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
 				resolve2();
 			}
