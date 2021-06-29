@@ -309,7 +309,7 @@ $(async function()
 					else if (type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th></tr></thead><tbody>";
 				}
 				modified = modified.replace("</tr></tbody>","</tr>");
-				console.log(modified)
+				//console.log(modified)
 				//window.alert("Tipo :" + type);
 				if (type.startsWith("Requisito ") && type != "Requisito input")
 				{
