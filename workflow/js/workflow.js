@@ -288,11 +288,11 @@ $(async function()
 		RM.Data.getContentsAttributes(selection, stati.concat([RM.Data.Attributes.ARTIFACT_TYPE,RM.Data.Attributes.IDENTIFIER]), async function(result1){
 			//window.alert(result1.data.length);
 			var i;
-			if($("#steps").prop('checked') && type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th><th>Contromisure</th><th>Requisiti</th></thead><tbody><tr>";
-			else if ($("#steps").prop('checked') && type == "Contromisura") modified = "<thead><tr><th>Contromisure</th><th>Requisiti</th></thead><tbody><tr>";
-			else if (type.startsWith("Requisito ")) modified = "<thead><tr><th>Requisiti</th></thead><tbody><tr>";
-			else if (type == "Contromisura") modified = "<thead><tr><th>Contromisure</th></thead><tbody><tr>";
-			else if (type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th></thead><tbody><tr>";
+			if($("#steps").prop('checked') && type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th><th>Contromisure</th><th>Requisiti</th></tr></thead><tbody><tr>";
+			else if ($("#steps").prop('checked') && type == "Contromisura") modified = "<thead><tr><th>Contromisure</th><th>Requisiti</th></tr></thead><tbody><tr>";
+			else if (type.startsWith("Requisito ")) modified = "<thead><tr><th>Requisiti</th></tr></thead><tbody><tr>";
+			else if (type == "Contromisura") modified = "<thead><tr><th>Contromisure</th></tr></thead><tbody><tr>";
+			else if (type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th></tr></thead><tbody><tr>";
 			for(item of result1.data)
 			{
 				type = item.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
