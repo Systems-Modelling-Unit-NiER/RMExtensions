@@ -74,7 +74,7 @@ function updateReqStatus(item)
 			//window.alert("link number: " + artifactIndex.length);
 			if(artifactIndex.length == 0)
 			{
-				if($("#steps").prop('checked')) modified = modified + "<td></td><td></td><td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
+				if($("#steps").prop('checked')) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
                 else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
 				resolve1();
 			}
@@ -138,18 +138,21 @@ async function updateCmStatus(item)
 			//window.alert("link number: " + artifactIndex.length);
 			if(artifactIndex.length == 0)
 			{
-				if($("#steps").prop('checked')) modified = modified + "<td></td><td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td><td></td>";
+				if($("#steps").prop('checked')) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td><td></td>";
 				else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
 				resolve2();
 			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE,"State (Workflow Requisito sistema)","State (Workflow Requisito sottosistema)","State (Workflow Requisito software)","State (Workflow Requisito hardware)"], async function(attrResult) {
 				//window.alert("length: " + attrResult.data.length);
+				var n = 0;
 				for(item2 of attrResult.data)
 				{
 					var linkedtype = item2.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
 					//window.alert("Linked type: " + linkedtype);
 					if (linkedtype.startsWith("Requisito ") && linkedtype != "Requisito input")
 					{
+						n++;
+						if (n>1) modified = modified + "<td></td>";
 						if(steps)
 						{
 							var saved = await updateReqStatus(item2);
@@ -208,16 +211,19 @@ async function updateHzStatus(item)
 			});
 			if(artifactIndex.length == 0)
 			{
-                if($("#steps").prop('checked')) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td><td></td><td></td>"
+                if($("#steps").prop('checked')) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>"
                 else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
 				resolve3();
 			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE, "State (Workflow Contromisura)"], async function(attrResult) {
+				var n = 0;
 				for(item2 of attrResult.data)
 				{
 					var linkedtype = item2.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
 					if (linkedtype == "Contromisura")
 					{
+						n++;
+						if (n>1) modified = modified + "<td></td>";
 						if(steps)
 						{
 							var saved = await updateCmStatus(item2);
