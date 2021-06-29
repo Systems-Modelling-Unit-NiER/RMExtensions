@@ -36,7 +36,7 @@ var urlChanged = [];
 var type = "";
 
 var steps = true;
-var numEl = 0;
+var numEl;
 var numTot;
 
 function isequal(string)
@@ -291,9 +291,10 @@ $(async function()
 			});
 		});
 	});
-	
+
 	$("#SetStatus").on("click", async function() {
 		modified = "";
+		numEl = 0;
 		if($("#steps").prop('checked')) steps = true;
 		else steps = false;
 		//window.alert(steps);
