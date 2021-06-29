@@ -60,7 +60,7 @@ function updateStatus(item,string)
 function updateReqStatus(item)
 {
 	return new Promise(resolve1 => {
-		if (type.startsWith("Requisito ")) {$("#updates").empty(); println("Aggiornamento status requisito " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","updates");}
+		if (type.startsWith("Requisito ")) {$("#updates").empty(); println("Aggiornamento status requisito " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","updates"); modified = modified + "<tr>";}
 		else println("Aggiornamento status requisiti...","updates");
 		var linkedStat = [];
 		//window.alert("opening: " + item.values[RM.Data.Attributes.IDENTIFIER]);
@@ -74,13 +74,13 @@ function updateReqStatus(item)
 			//window.alert("link number: " + artifactIndex.length);
 			if(artifactIndex.length == 0)
 			{
-				if(steps) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
-                else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
+				if(steps) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td></tr>";
+                else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td></tr>";
 				resolve1();
 			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE,"Esito"], function(attrResult) {
 				//window.alert("length: " + attrResult.data.length);
-				modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
+				modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td></tr>";
 				for(item2 of attrResult.data)
 				{
 					var linkedtype = item2.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
@@ -125,7 +125,7 @@ async function updateCmStatus(item)
 {
 	return new Promise(resolve2 => {
 		var linkedStat = [];
-		if (type == "Contromisura") {$("#updates").empty(); println("Aggiornamento status contromisura " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","updates");}
+		if (type == "Contromisura") {$("#updates").empty(); println("Aggiornamento status contromisura " + item.values[RM.Data.Attributes.IDENTIFIER] + "...","updates"); modified = modified + "<tr>";}
 		else println("Aggiornamento status contromisure...","updates");
 		//window.alert("opening: " + item.values[RM.Data.Attributes.IDENTIFIER]);
 		RM.Data.getLinkedArtifacts(item.ref, async function(linksResult) {
@@ -138,8 +138,8 @@ async function updateCmStatus(item)
 			//window.alert("link number: " + artifactIndex.length);
 			if(artifactIndex.length == 0)
 			{
-				if(steps) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
-				else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
+				if(steps) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td><td></td></tr>";
+				else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td></tr>";
 				resolve2();
 			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE,"State (Workflow Requisito sistema)","State (Workflow Requisito sottosistema)","State (Workflow Requisito software)","State (Workflow Requisito hardware)"], async function(attrResult) {
@@ -157,7 +157,7 @@ async function updateCmStatus(item)
 						{
 							var saved = await updateReqStatus(item2);
 							linkedStat.push(saved);
-							if (n>1) modified = modified + "<td></td><td></td>";
+							if (n>1) modified = modified + "<tr><td></td><td></td>";
 							else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 						}
 						else linkedStat.push(item2.values["State (Workflow " + item2.values[RM.Data.Attributes.ARTIFACT_TYPE].name + ")"]);
@@ -212,13 +212,13 @@ async function updateHzStatus(item)
 			});
 			if(artifactIndex.length == 0)
 			{
-                if(steps) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>"
-                else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
+                if(steps) modified = modified + "<tr><td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td><td></td><td></td></tr>"
+                else modified = modified + "<tr><td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td></tr>";
 				resolve3();
 			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE, "State (Workflow Contromisura)"], async function(attrResult) {
 				var n = 0;
-				if(!steps) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
+				if(!steps) modified = modified + "<tr><td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td></tr>";
 				for(item2 of attrResult.data)
 				{
 					var linkedtype = item2.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
@@ -227,13 +227,12 @@ async function updateHzStatus(item)
 						n++;
 						if(steps)
 						{
+							if (n>1) modified = modified + "<tr><td></td>";
+							else modified = modified + "<tr><td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 							var saved = await updateCmStatus(item2);
 							linkedStat.push(saved);
-							if (n>1) modified = modified + "<tr><td></td>";
-							else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 						}
 						else linkedStat.push(item2.values["State (Workflow Contromisura)"]);
-						modified =  modified + "</tr></tbody>";
 					}
 				}
 				equal = "Chiuso";
@@ -303,13 +302,13 @@ $(async function()
 				type = item.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
 				if (modified === "")
 				{
-					if($("#steps").prop('checked') && type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th><th>Contromisure</th><th>Requisiti</th></tr></thead><tbody><tr>";
-					else if ($("#steps").prop('checked') && type == "Contromisura") modified = "<thead><tr><th>Contromisure</th><th>Requisiti</th></tr></thead><tbody><tr>";
-					else if (type.startsWith("Requisito ")) modified = "<thead><tr><th>Requisiti</th></tr></thead><tbody><tr>";
-					else if (type == "Contromisura") modified = "<thead><tr><th>Contromisure</th></tr></thead><tbody><tr>";
-					else if (type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th></tr></thead><tbody><tr>";
+					if($("#steps").prop('checked') && type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th><th>Contromisure</th><th>Requisiti</th></tr></thead><tbody>";
+					else if ($("#steps").prop('checked') && type == "Contromisura") modified = "<thead><tr><th>Contromisure</th><th>Requisiti</th></tr></thead><tbody>";
+					else if (type.startsWith("Requisito ")) modified = "<thead><tr><th>Requisiti</th></tr></thead><tbody>";
+					else if (type == "Contromisura") modified = "<thead><tr><th>Contromisure</th></tr></thead><tbody>";
+					else if (type.startsWith("Hazard ")) modified = "<thead><tr><th>Hazard</th></tr></thead><tbody>";
 				}
-				modified = modified.replace("</tr></tbody>","</tr><tr>");
+				modified = modified.replace("</tr></tbody>","</tr>");
 				console.log(modified)
 				//window.alert("Tipo :" + type);
 				if (type.startsWith("Requisito ") && type != "Requisito input")
@@ -324,6 +323,7 @@ $(async function()
 				{
 					await updateHzStatus(item);
 				}
+				modified =  modified + "</tbody>";
 				$("#tabResults").empty();
 				console.log(modified)
 				$("#tabResults").append(modified);
