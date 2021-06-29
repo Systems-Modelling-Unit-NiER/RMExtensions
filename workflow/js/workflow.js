@@ -74,7 +74,7 @@ function updateReqStatus(item)
 			//window.alert("link number: " + artifactIndex.length);
 			if(artifactIndex.length == 0)
 			{
-				if($("#steps").prop('checked')) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
+				if(steps) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
                 else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
 				resolve1();
 			}
@@ -138,13 +138,14 @@ async function updateCmStatus(item)
 			//window.alert("link number: " + artifactIndex.length);
 			if(artifactIndex.length == 0)
 			{
-				if($("#steps").prop('checked')) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
+				if(steps) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
 				else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
 				resolve2();
 			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE,"State (Workflow Requisito sistema)","State (Workflow Requisito sottosistema)","State (Workflow Requisito software)","State (Workflow Requisito hardware)"], async function(attrResult) {
 				//window.alert("length: " + attrResult.data.length);
 				var n = 0;
+				if(!steps) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 				for(item2 of attrResult.data)
 				{
 					var linkedtype = item2.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
@@ -152,12 +153,12 @@ async function updateCmStatus(item)
 					if (linkedtype.startsWith("Requisito ") && linkedtype != "Requisito input")
 					{
 						n++;
-						if (n>1) modified = modified + "<td></td>";
-						else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 						if(steps)
 						{
 							var saved = await updateReqStatus(item2);
 							linkedStat.push(saved);
+							if (n>1) modified = modified + "<td></td><td></td>";
+							else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 						}
 						else linkedStat.push(item2.values["State (Workflow " + item2.values[RM.Data.Attributes.ARTIFACT_TYPE].name + ")"]);
 					}
@@ -211,26 +212,28 @@ async function updateHzStatus(item)
 			});
 			if(artifactIndex.length == 0)
 			{
-                if($("#steps").prop('checked')) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>"
+                if(steps) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>"
                 else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</td>";
 				resolve3();
 			}
 			RM.Data.getAttributes(artifactIndex, [RM.Data.Attributes.IDENTIFIER, RM.Data.Attributes.ARTIFACT_TYPE, "State (Workflow Contromisura)"], async function(attrResult) {
 				var n = 0;
+				if(!steps) modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 				for(item2 of attrResult.data)
 				{
 					var linkedtype = item2.values[RM.Data.Attributes.ARTIFACT_TYPE].name;
 					if (linkedtype == "Contromisura")
 					{
 						n++;
-						if (n>1) modified = modified + "<td></td>";
-						else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 						if(steps)
 						{
 							var saved = await updateCmStatus(item2);
 							linkedStat.push(saved);
+							if (n>1) modified = modified + "<tr><td></td>";
+							else modified = modified + "<td><a href=\"" + item.ref.toUri() + "\" target=\"_blank\">" + item.values[RM.Data.Attributes.IDENTIFIER] + "</a></td>";
 						}
 						else linkedStat.push(item2.values["State (Workflow Contromisura)"]);
+						modified =  modified + "</tr></tbody>";
 					}
 				}
 				equal = "Chiuso";
@@ -321,11 +324,9 @@ $(async function()
 				{
 					await updateHzStatus(item);
 				}
-				modified =  modified + "</tr></tbody>";
 				$("#tabResults").empty();
 				console.log(modified)
 				$("#tabResults").append(modified);
-				break;
 			}
 			for(i=0;i<idChanged.length;i++)
 			{
