@@ -330,7 +330,7 @@ $(async function()
 				}
 				modified =  modified + "</tbody>";
 				$("#tabResults").empty();
-				console.log(modified)
+				//console.log(modified)
 				$("#tabResults").append(modified);
 			}
 			for(i=0;i<idChanged.length;i++)
