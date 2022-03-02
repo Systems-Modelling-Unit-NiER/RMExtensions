@@ -232,7 +232,7 @@ $(function() {
 				}
 			}
 		});
-		Window.alert(captionpairs.length/2);
+		window.alert(captionpairs.length/2);
 		var j;
 		for(j = 0; j < captionpairs.length; j++)
 		{
