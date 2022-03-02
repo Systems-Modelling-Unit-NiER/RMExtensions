@@ -14,7 +14,7 @@
 			</head>
 			<body>
 				<h3>Operations</h3>				
-				<button id="joinArtifacts">Join Artifacts</button>
+				<button id="joinArtifacts">Join Artifacts</button><button id="joinCaptions">Join all Captions</button>
 				<br/>
     				<hr style="height:1pt; visibility:hidden;" />
 				<button id="splitArtifact">Split Artifact</button>
