@@ -22,6 +22,7 @@ Contract with IBM Corp.
  */
 
 var initialize = true;
+var counter = 0;
 function version()
 {
 	window.alert("prova 7");
@@ -187,7 +188,6 @@ $(async function() {
 	var selection = [];
 	var captionpairs = [];
 	var thisdoc = null;
-	var counter = 0;
 	var total = 0;
 	
 	// Tracks whether or not to update selection messages while an operation is performed.  Otherwise,
