@@ -303,7 +303,6 @@ $(function() {
 				if(((txt.startsWith("Tabella ") && !htmltxt.includes("<table ")) || (txt.startsWith("Figura ") && !htmltxt.includes("<img "))) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
 					var ii = i-1;
-					var picture = result.data[ii];
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					captionpairs.push(result.data[ii].ref,result.data[i].ref);
 				}
