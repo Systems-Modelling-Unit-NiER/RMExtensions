@@ -290,6 +290,7 @@ $(function() {
 									$("#result").empty();
 									println("Processed caption "+counter+"/"+total);
 								}
+								total = 0;
 							}
 						});
 					});
