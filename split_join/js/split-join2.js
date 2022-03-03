@@ -24,7 +24,7 @@ Contract with IBM Corp.
 var initialize = true;
 function version()
 {
-	window.alert("prova 4");
+	window.alert("prova 5");
 	initialize=false;
 }
 
