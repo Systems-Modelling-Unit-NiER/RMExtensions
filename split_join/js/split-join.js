@@ -332,8 +332,9 @@ $(async function() {
 				if(j%2)
 				{
 					selection.push(captionpairs[j-1],captionpairs[j]);
+					window.alert("oki");
 					await join(selection);
-					if(!(j%20)) window.alert("okz");
+					window.alert("okz");
 					$("#result").empty();
 					println(total+"Joined: "+counter+"/"+total);
 				}
