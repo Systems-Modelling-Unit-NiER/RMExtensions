@@ -288,7 +288,7 @@ $(function() {
 								if(total == counter)
 								{
 									$("#result").empty();
-									println("Processed caption "+counter+"/"+total);
+									println("Processed all "+total+" captions");
 								}
 								total = 0;
 							}
