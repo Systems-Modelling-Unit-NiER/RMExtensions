@@ -320,6 +320,7 @@ $(async function() {
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					captionpairs.push(result.data[ii].ref,result.data[i].ref);
 				}
+				if(!(j%20)) window.alert("ok");
 			}
 			var j;
 			$("#result").empty();
