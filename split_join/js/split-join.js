@@ -320,7 +320,6 @@ $(async function() {
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					captionpairs.push(result.data[ii].ref,result.data[i].ref);
 				}
-				if(!(i%20)) window.alert("ok");
 			}
 			var j;
 			$("#result").empty();
@@ -332,11 +331,9 @@ $(async function() {
 				if(j%2)
 				{
 					selection.push(captionpairs[j-1],captionpairs[j]);
-					window.alert("oki");
 					await join(selection);
-					window.alert("okz");
 					$("#result").empty();
-					println(total+"Joined: "+counter+"/"+total);
+					println("Joined: "+counter+"/"+total);
 				}
 			}
 		});
