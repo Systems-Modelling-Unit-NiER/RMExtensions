@@ -308,9 +308,9 @@ $(function() {
 			return;
 		}
 		captionpairs = [];
+		println("Inspecting module...");
 		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.PRIMARY_TEXT], function(result) {
 			var i;
-			println("Inspecting module...");
 			for(i = 0; i < result.data.length; i++)
 			{
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace('\xA0',' ');
