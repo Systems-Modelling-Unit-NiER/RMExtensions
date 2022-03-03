@@ -70,9 +70,115 @@ function constructJoined(artifactAttributes, attrName) {
 	return newText;
 };
 
+function join(artifacts) {
+	return new Promise(resolve1 => {
+		var localselection = artifacts;
+		RM.Data.getAttributes(localselection, function (attrResult) {
+			if (attrResult.code === RM.OperationResult.OPERATION_OK) {
+				var artifactAttributes = attrResult.data;
+				if (artifactAttributes) {
+					operationInProgress = true;
+					var numattr = 0;
+					var attrNames = [];
+					var keys = [];
+					var item = attrResult.data[0];
+					for (var key in item.values)
+					{
+						keys.push(key);
+						numattr++;
+					}
+					RM.Data.getValueRange(localselection[0], keys, function (valResult)
+					{
+						var toSave = [];
+						var joinedText = [];
+						var toSkip = [];
+						if (valResult.code != RM.OperationResult.OPERATION_OK)
+						{
+							return;
+						}
+						for (var i = 0; i < numattr; i++)
+						{
+							toSkip[i] = false;
+							// Collect the information for each attribute in turn.
+							attrNames[i] = valResult.data[i].attributeKey;
+							var construct = constructJoined(artifactAttributes,attrNames[i]);
+							if(valResult.data[i].multiValued) construct = construct.replace(/\n/g, ",");
+							var lines = construct.split("\n");
+							if(valResult.data[i].valueType !== RM.Data.ValueTypes.ENUMERATION) joinedText[i] = construct;
+							else if((construct+"")!="") joinedText[i] = lines[0];
+							else toSkip[i] = true;
+						};
+						//insert only the attributes which can be joined
+						var firstChoice = artifactAttributes.shift();
+						var newTextValues = new RM.ArtifactAttributes(firstChoice.ref);
+						for (var i = 0; i < numattr; i++)
+						{
+							if(attrNames[i] != "http://purl.org/dc/terms/creator"
+							   && attrNames[i] != "http://purl.org/dc/terms/created"
+							   && attrNames[i] != "http://purl.org/dc/terms/contributor"
+							   && attrNames[i] != "http://purl.org/dc/terms/modified"
+							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/types/ArtifactFormat"
+							   && attrNames[i] != "http://purl.org/dc/terms/identifier"
+							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/depth"
+							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/section"
+							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/module"
+							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/isHeading"
+							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/types/AlternateSpelling"
+							   && !(attrNames[i].startsWith("State (Workflow "))
+							   && !toSkip[i]) newTextValues.values[attrNames[i]] = (valResult.data[i].multiValued)?(joinedText[i].split(",")):(joinedText[i]);
+						}
+						println("Joining all selected text into first artifact");
+						RM.Data.setAttributes(newTextValues, async function(setResult) {
+							if (setResult.code === RM.OperationResult.OPERATION_OK) {
+								// Remove the leftover artifacts
+								var targetCount = 0;
+								// Use a recursive delete function to delete however many artifacts are left
+								// over from the join operation, while waiting for each individual deletion
+								// to complete before starting the next one
+								var removeSequence = async function() {
+									return new Promise(resolve2 => {
+										if (artifactAttributes[targetCount]) {
+											RM.Data.Module.removeArtifact(artifactAttributes[targetCount].ref, 
+													true, async function(removeResult) {
+												if (removeResult.code === RM.OperationResult.OPERATION_OK) {
+													targetCount++;
+													await removeSequence();
+												} else {
+													println("Unable to remove joined artifact, aborting join operation.");
+													operationInProgress = false;
+												}
+												resolve2();
+											});
+										} else {
+											println("The first artifact that you selected now contains the contents of " 
+													+ "the other selected artifacts. The other artifacts were removed.");
+											println("The artifacts were joined.");
+											operationInProgress = false;
+											resolve2();
+										}
+									});
+								};
+								println("Removing leftover artifacts after joining their content.");
+								// Start the sequence of deletions
+								await removeSequence();
+							} else {
+								println("Unable to join content into first artifact, aborting join operation. ");
+								operationInProgress = false;
+							}
+							counter++;
+							resolve1();
+						});
+					});
+
+				}
+			}
+		});
+	});
+};
+
 /* Main Operating Function */
 
-$(function() {
+$(async function() {
 	
 	//if (initialize==true) version();
 	
@@ -191,116 +297,9 @@ $(function() {
 		});
 	});
 	
-	$("#joinArtifacts").on("click", function() {
-		var localselection = selection;
-		RM.Data.getAttributes(localselection, function (attrResult) {
-			if (attrResult.code === RM.OperationResult.OPERATION_OK) {
-				var artifactAttributes = attrResult.data;
-				if (artifactAttributes) {
-					operationInProgress = true;
-					var numattr = 0;
-					var attrNames = [];
-					var keys = [];
-					var item = attrResult.data[0];
-					for (var key in item.values)
-					{
-						keys.push(key);
-						numattr++;
-					}
-					RM.Data.getValueRange(localselection[0], keys, function (valResult)
-					{
-						var toSave = [];
-						var joinedText = [];
-						var toSkip = [];
-						if (valResult.code != RM.OperationResult.OPERATION_OK)
-						{
-							return;
-						}
-						for (var i = 0; i < numattr; i++)
-						{
-							toSkip[i] = false;
-							// Collect the information for each attribute in turn.
-							attrNames[i] = valResult.data[i].attributeKey;
-							var construct = constructJoined(artifactAttributes,attrNames[i]);
-							if(valResult.data[i].multiValued) construct = construct.replace(/\n/g, ",");
-							var lines = construct.split("\n");
-							if(valResult.data[i].valueType !== RM.Data.ValueTypes.ENUMERATION) joinedText[i] = construct;
-							else if((construct+"")!="") joinedText[i] = lines[0];
-							else toSkip[i] = true;
-						};
-						//insert only the attributes which can be joined
-						var firstChoice = artifactAttributes.shift();
-						var newTextValues = new RM.ArtifactAttributes(firstChoice.ref);
-						for (var i = 0; i < numattr; i++)
-						{
-							if(attrNames[i] != "http://purl.org/dc/terms/creator"
-							   && attrNames[i] != "http://purl.org/dc/terms/created"
-							   && attrNames[i] != "http://purl.org/dc/terms/contributor"
-							   && attrNames[i] != "http://purl.org/dc/terms/modified"
-							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/types/ArtifactFormat"
-							   && attrNames[i] != "http://purl.org/dc/terms/identifier"
-							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/depth"
-							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/section"
-							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/module"
-							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/isHeading"
-							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/types/AlternateSpelling"
-							   && !(attrNames[i].startsWith("State (Workflow "))
-					  		   && !toSkip[i]) newTextValues.values[attrNames[i]] = (valResult.data[i].multiValued)?(joinedText[i].split(",")):(joinedText[i]);
-						}
-						println("Joining all selected text into first artifact");
-						RM.Data.setAttributes(newTextValues, function(setResult) {
-							if (setResult.code === RM.OperationResult.OPERATION_OK) {
-								// Remove the leftover artifacts
-								var targetCount = 0;
-								// Use a recursive delete function to delete however many artifacts are left
-								// over from the join operation, while waiting for each individual deletion
-								// to complete before starting the next one
-								var removeSequence = function() {
-									if (artifactAttributes[targetCount]) {
-										RM.Data.Module.removeArtifact(artifactAttributes[targetCount].ref, 
-												true, function(removeResult) {
-											if (removeResult.code === RM.OperationResult.OPERATION_OK) {
-												targetCount++;
-												removeSequence();
-											} else {
-												println("Unable to remove joined artifact, aborting join operation.");
-												operationInProgress = false;
-											}
-										});
-									} else {
-										println("The first artifact that you selected now contains the contents of " 
-												+ "the other selected artifacts. The other artifacts were removed.");
-										println("The artifacts were joined.");
-										operationInProgress = false;
-									}
-								};
-								println("Removing leftover artifacts after joining their content.");
-								// Start the sequence of deletions
-								removeSequence();
-							} else {
-								println("Unable to join content into first artifact, aborting join operation. ");
-								operationInProgress = false;
-							}
-							if(total!=0)
-							{
-								counter++;
-								println("Processed caption "+counter+"/"+total);
-								if(total == counter)
-								{
-									$("#result").empty();
-									println("Processed all "+total+" captions");
-								}
-								total = 0;
-							}
-						});
-					});
-					
-				}
-			}
-		});
-	});
+	$("#joinArtifacts").on("click", join(selection));
 	
-	$("#joinCaptions").on("click", function() {
+	$("#joinCaptions").on("click", async function() {
 		counter = 0;
 		if(thisdoc === null)
 		{
@@ -309,7 +308,7 @@ $(function() {
 		}
 		captionpairs = [];
 		println("Inspecting module...");
-		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.PRIMARY_TEXT], function(result) {
+		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.PRIMARY_TEXT], async function(result) {
 			var i;
 			for(i = 0; i < result.data.length; i++)
 			{
@@ -332,7 +331,9 @@ $(function() {
 				if(j%2)
 				{
 					selection.push(captionpairs[j-1],captionpairs[j]);
-					$("#joinArtifacts").trigger('click');
+					await join(selection);
+					$("#result").empty();
+					println(total+"Joined: "+counter+"/"+total);
 				}
 			}
 		});
