@@ -298,7 +298,7 @@ $(async function() {
 	});
 	
 	$("#joinArtifacts").on("click", async function() {
-		await join(selection);
+		join(selection);
 	});
 	
 	$("#joinCaptions").on("click", async function() {
