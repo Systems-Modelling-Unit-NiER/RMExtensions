@@ -105,7 +105,7 @@ $(function() {
 						println("Ready to split into component artifacts.");
 					}
 				} else {
-					println("Unable to determine root artifact for operation.");
+					println("No artifacts selected.");
 				}
 			});
 		}
