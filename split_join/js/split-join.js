@@ -297,7 +297,7 @@ $(async function() {
 		});
 	});
 	
-	$("#joinArtifacts").on("click", async function() {
+	$("#joinArtifacts").on("click", function() {
 		join(selection);
 	});
 	
