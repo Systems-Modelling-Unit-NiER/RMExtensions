@@ -2,7 +2,6 @@
  Licensed Materials - Property of IBM
  import-repair.js
  © Copyright IBM Corporation 2014
-
 U.S. Government Users Restricted Rights:  Use, duplication or disclosure restricted by GSA ADP Schedule 
 Contract with IBM Corp. 
 */
@@ -25,7 +24,7 @@ Contract with IBM Corp.
 var initialize = true;
 function version()
 {
-	window.alert("prova 54");
+	window.alert("prova 7");
 	initialize=false;
 }
 
@@ -34,7 +33,13 @@ function println(string) {
 	var p = document.createElement("p");
 	p.innerHTML = string;
 	$(p).appendTo("#result");
-};
+}
+
+function extractContent(s) {
+	var span = document.createElement('span');
+	span.innerHTML = s;
+	return span.textContent || span.innerText;
+}
 
 /* Creates a single, joined block of text from the RM.Data.Attributes.PRIMARY_TEXT contents of the selected
  * artifacts to send to the server.
@@ -74,6 +79,8 @@ $(function() {
 	// this function is run when the document is ready.
 	
 	var selection = [];
+	var captionpairs = [];
+	var thisdoc = null;
 	
 	// Tracks whether or not to update selection messages while an operation is performed.  Otherwise,
 	// as the selection changed with the creation or deletion of artifacts the information displayed in
@@ -100,6 +107,17 @@ $(function() {
 				}
 			});
 		}
+	});
+	
+	RM.Event.subscribe(RM.Event.ARTIFACT_OPENED, function(opened) {
+		RM.Data.getAttributes(opened, [RM.Data.Attributes.NAME,RM.Data.Attributes.FORMAT], function(result){			
+			result.data.forEach(function(item){
+				if (item.values[RM.Data.Attributes.FORMAT] === RM.Data.Formats.MODULE)
+				{
+					thisdoc = opened;
+				}
+			});
+		});
 	});
 	
 	$("#splitArtifact").on("click", function() {
@@ -172,7 +190,8 @@ $(function() {
 	});
 	
 	$("#joinArtifacts").on("click", function() {
-		RM.Data.getAttributes(selection, function (attrResult) {
+		var localselection = selection;
+		RM.Data.getAttributes(localselection, function (attrResult) {
 			if (attrResult.code === RM.OperationResult.OPERATION_OK) {
 				var artifactAttributes = attrResult.data;
 				if (artifactAttributes) {
@@ -186,7 +205,7 @@ $(function() {
 						keys.push(key);
 						numattr++;
 					}
-					RM.Data.getValueRange(selection[0], keys, function (valResult)
+					RM.Data.getValueRange(localselection[0], keys, function (valResult)
 					{
 						var toSave = [];
 						var joinedText = [];
@@ -263,6 +282,40 @@ $(function() {
 						});
 					});
 					
+				}
+			}
+		});
+	});
+	
+	$("#joinCaptions").on("click", function() {
+		if(thisdoc === null)
+		{
+			window.alert("Nessun modulo selezionato. Provare a uscire e rientrare");
+			return;
+		}
+		captionpairs = [];
+		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.PRIMARY_TEXT], function(result) {
+			var i;
+			for(i = 0; i < result.data.length; i++)
+			{
+				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace('\xA0',' ');
+				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
+				if(((txt.startsWith("Tabella ") && !htmltxt.includes("<table ")) || (txt.startsWith("Figura ") && !htmltxt.includes("<img "))) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
+				{
+					var ii = i-1;
+					var picture = result.data[ii];
+					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
+					captionpairs.push(result.data[ii].ref,result.data[i].ref);
+				}
+			}
+			var j;
+			for(j = 0; j < captionpairs.length; j++)
+			{
+				selection = [];
+				if(j%2)
+				{
+					selection.push(captionpairs[j-1],captionpairs[j]);
+					$("#joinArtifacts").trigger('click');
 				}
 			}
 		});
