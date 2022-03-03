@@ -320,7 +320,7 @@ $(async function() {
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					captionpairs.push(result.data[ii].ref,result.data[i].ref);
 				}
-				if(!(j%20)) window.alert("ok");
+				if(!(i%20)) window.alert("ok");
 			}
 			var j;
 			$("#result").empty();
@@ -333,6 +333,7 @@ $(async function() {
 				{
 					selection.push(captionpairs[j-1],captionpairs[j]);
 					await join(selection);
+					if(!(j%20)) window.alert("okz");
 					$("#result").empty();
 					println(total+"Joined: "+counter+"/"+total);
 				}
