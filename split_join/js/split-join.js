@@ -81,6 +81,8 @@ $(function() {
 	var selection = [];
 	var captionpairs = [];
 	var thisdoc = null;
+	var counter = 0;
+	var total = 0;
 	
 	// Tracks whether or not to update selection messages while an operation is performed.  Otherwise,
 	// as the selection changed with the creation or deletion of artifacts the information displayed in
@@ -279,6 +281,16 @@ $(function() {
 								println("Unable to join content into first artifact, aborting join operation. ");
 								operationInProgress = false;
 							}
+							if(total!=0)
+							{
+								counter++;
+								println("Processed caption "+counter+"/"+total);
+								if(total == counter)
+								{
+									$("#result").empty();
+									println("Processed caption "+counter+"/"+total);
+								}
+							}
 						});
 					});
 					
@@ -308,6 +320,7 @@ $(function() {
 				}
 			}
 			var j;
+			total = Math.round(captionpairs.length/2);
 			for(j = 0; j < captionpairs.length; j++)
 			{
 				selection = [];
