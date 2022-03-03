@@ -300,6 +300,7 @@ $(function() {
 	});
 	
 	$("#joinCaptions").on("click", function() {
+		counter = 0;
 		if(thisdoc === null)
 		{
 			window.alert("Nessun modulo selezionato. Provare a uscire e rientrare");
