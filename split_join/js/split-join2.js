@@ -25,7 +25,7 @@ Contract with IBM Corp.
 var initialize = true;
 function version()
 {
-	window.alert("prova 2");
+	window.alert("prova 21");
 	initialize=false;
 }
 
@@ -34,7 +34,7 @@ function println(string) {
 	var p = document.createElement("p");
 	p.innerHTML = string;
 	$(p).appendTo("#result");
-};
+}
 
 /* Creates a single, joined block of text from the RM.Data.Attributes.PRIMARY_TEXT contents of the selected
  * artifacts to send to the server.
@@ -57,13 +57,127 @@ function constructJoined(artifactAttributes, attrName) {
 			else if(identifier < theMin) {newText = (((newText+"")=="" || (aaText+"")=="")? aaText : aaText+"\n") + newText; theMin = identifier;}
 			else {newText = newText + aaText;}
 			//window.alert(newText);
-		} else {
+		}
+		else {
 			// Error handling
 		}
 	});
 	
 	return newText;
-};
+}
+
+function extractContent(s) {
+	var span = document.createElement('span');
+	span.innerHTML = s;
+	return span.textContent || span.innerText;
+}
+
+function aaa(attrs) {
+	window.alert("what");
+}
+
+function join(attrs) {
+	window.alert("join!");
+	RM.Data.getAttributes(attrs, function (attrResult) {
+		if (attrResult.code === RM.OperationResult.OPERATION_OK) {
+			window.alert("join! 1");
+			var artifactAttributes = attrResult.data;
+			if (artifactAttributes) {
+				operationInProgress = true;
+				var numattr = 0;
+				var attrNames = [];
+				var keys = [];
+				var item = attrResult.data[0];
+				for (var key in item.values)
+				{
+					keys.push(key);
+					numattr++;
+				}
+				RM.Data.getValueRange(attrs[0], keys, function (valResult)
+				{
+					window.alert("join! 2");
+					var toSave = [];
+					var joinedText = [];
+					var toSkip = [];
+					if (valResult.code != RM.OperationResult.OPERATION_OK)
+					{
+						return;
+					}
+					for (var i = 0; i < numattr; i++)
+					{
+						toSkip[i] = false;
+						// Collect the information for each attribute in turn.
+						attrNames[i] = valResult.data[i].attributeKey;
+						var construct = constructJoined(artifactAttributes,attrNames[i]);
+						if(valResult.data[i].multiValued) construct = construct.replace(/\n/g, ",");
+						var lines = construct.split("\n");
+						if(valResult.data[i].valueType !== RM.Data.ValueTypes.ENUMERATION) joinedText[i] = construct;
+						else if((construct+"")!="") joinedText[i] = lines[0];
+						else toSkip[i] = true;
+					};
+					//insert only the attributes which can be joined
+					var firstChoice = artifactAttributes.shift();
+					var newTextValues = new RM.ArtifactAttributes(firstChoice.ref);
+					for (var i = 0; i < numattr; i++)
+					{
+						if(attrNames[i] != "http://purl.org/dc/terms/creator"
+						   && attrNames[i] != "http://purl.org/dc/terms/created"
+						   && attrNames[i] != "http://purl.org/dc/terms/contributor"
+						   && attrNames[i] != "http://purl.org/dc/terms/modified"
+						   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/types/ArtifactFormat"
+						   && attrNames[i] != "http://purl.org/dc/terms/identifier"
+						   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/depth"
+						   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/section"
+						   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/module"
+						   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/isHeading"
+						   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/types/AlternateSpelling"
+						   && !(attrNames[i].startsWith("State (Workflow "))
+						   && !toSkip[i]) newTextValues.values[attrNames[i]] = (valResult.data[i].multiValued)?(joinedText[i].split(",")):(joinedText[i]);
+					}
+					println("Joining all selected text into first artifact");
+					window.alert("join! 3");
+					RM.Data.setAttributes(newTextValues, function(setResult) {
+						window.alert("set! 1");
+						if (setResult.code === RM.OperationResult.OPERATION_OK) {
+							// Remove the leftover artifacts
+							var targetCount = 0;
+							// Use a recursive delete function to delete however many artifacts are left
+							// over from the join operation, while waiting for each individual deletion
+							// to complete before starting the next one
+							var removeSequence = function() {
+								if (artifactAttributes[targetCount]) {
+									RM.Data.Module.removeArtifact(artifactAttributes[targetCount].ref, 
+											true, function(removeResult) {
+										if (removeResult.code === RM.OperationResult.OPERATION_OK) {
+											targetCount++;
+											removeSequence();
+										} else {
+											println("Unable to remove joined artifact, aborting join operation.");
+											operationInProgress = false;
+										}
+									});
+								} else {
+									println("The first artifact that you selected now contains the contents of " 
+											+ "the other selected artifacts. The other artifacts were removed.");
+									println("The artifacts were joined.");
+									operationInProgress = false;
+								}
+							};
+							window.alert("set! 2");
+							println("Removing leftover artifacts after joining their content.");
+							// Start the sequence of deletions
+							removeSequence();
+						} else {
+							println("Unable to join content into first artifact, aborting join operation. ");
+							operationInProgress = false;
+						}
+					});
+				});
+				
+			}
+		}
+	});
+}
 
 /* Main Operating Function */
 
@@ -115,129 +229,42 @@ $(function() {
 		});
 	});
 
-	function join(attrs) {
-		RM.Data.getAttributes(attrs, function (attrResult) {
-			if (attrResult.code === RM.OperationResult.OPERATION_OK) {
-				var artifactAttributes = attrResult.data;
-				if (artifactAttributes) {
-					operationInProgress = true;
-					var numattr = 0;
-					var attrNames = [];
-					var keys = [];
-					var item = attrResult.data[0];
-					for (var key in item.values)
-					{
-						keys.push(key);
-						numattr++;
-					}
-					RM.Data.getValueRange(attrs[0], keys, function (valResult)
-					{
-						var toSave = [];
-						var joinedText = [];
-						var toSkip = [];
-						if (valResult.code != RM.OperationResult.OPERATION_OK)
-						{
-							return;
-						}
-						for (var i = 0; i < numattr; i++)
-						{
-							toSkip[i] = false;
-							// Collect the information for each attribute in turn.
-							attrNames[i] = valResult.data[i].attributeKey;
-							var construct = constructJoined(artifactAttributes,attrNames[i]);
-							if(valResult.data[i].multiValued) construct = construct.replace(/\n/g, ",");
-							var lines = construct.split("\n");
-							if(valResult.data[i].valueType !== RM.Data.ValueTypes.ENUMERATION) joinedText[i] = construct;
-							else if((construct+"")!="") joinedText[i] = lines[0];
-							else toSkip[i] = true;
-						};
-						//insert only the attributes which can be joined
-						var firstChoice = artifactAttributes.shift();
-						var newTextValues = new RM.ArtifactAttributes(firstChoice.ref);
-						for (var i = 0; i < numattr; i++)
-						{
-							if(attrNames[i] != "http://purl.org/dc/terms/creator"
-							   && attrNames[i] != "http://purl.org/dc/terms/created"
-							   && attrNames[i] != "http://purl.org/dc/terms/contributor"
-							   && attrNames[i] != "http://purl.org/dc/terms/modified"
-							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/types/ArtifactFormat"
-							   && attrNames[i] != "http://purl.org/dc/terms/identifier"
-							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/depth"
-							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/section"
-							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/module"
-							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/rdf/isHeading"
-							   && attrNames[i] != "http://www.ibm.com/xmlns/rdm/types/AlternateSpelling"
-							   && !(attrNames[i].startsWith("State (Workflow "))
-					  		   && !toSkip[i]) newTextValues.values[attrNames[i]] = (valResult.data[i].multiValued)?(joinedText[i].split(",")):(joinedText[i]);
-						}
-						println("Joining all selected text into first artifact");
-						RM.Data.setAttributes(newTextValues, function(setResult) {
-							if (setResult.code === RM.OperationResult.OPERATION_OK) {
-								// Remove the leftover artifacts
-								var targetCount = 0;
-								// Use a recursive delete function to delete however many artifacts are left
-								// over from the join operation, while waiting for each individual deletion
-								// to complete before starting the next one
-								var removeSequence = function() {
-									if (artifactAttributes[targetCount]) {
-										RM.Data.Module.removeArtifact(artifactAttributes[targetCount].ref, 
-												true, function(removeResult) {
-											if (removeResult.code === RM.OperationResult.OPERATION_OK) {
-												targetCount++;
-												removeSequence();
-											} else {
-												println("Unable to remove joined artifact, aborting join operation.");
-												operationInProgress = false;
-											}
-										});
-									} else {
-										println("The first artifact that you selected now contains the contents of " 
-												+ "the other selected artifacts. The other artifacts were removed.");
-										println("The artifacts were joined.");
-										operationInProgress = false;
-									}
-								};
-								println("Removing leftover artifacts after joining their content.");
-								// Start the sequence of deletions
-								removeSequence();
-							} else {
-								println("Unable to join content into first artifact, aborting join operation. ");
-								operationInProgress = false;
-							}
-						});
-					});
-					
-				}
-			}
-		});
-	}
-
 	$("#joinCaptions").on("click", function() {
+		version();
+		aaa(selection);
+		//window.alert(2222);
 		if(thisdoc === null)
 		{
 			window.alert("Nessun modulo selezionato. Provare a uscire e rientrare");
 			return;
 		}
 		captionpairs = [];
-		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.FORMAT, RM.Data.Attributes.PRIMARY_TEXT], function(result) {
+		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.PRIMARY_TEXT], function(result) {
 			var i;
 			for(i = 0; i < result.data.length; i++)
 			{
-				if(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT].startsWith("Tabella "))
+				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace('\xA0',' ');
+				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
+				/*if (i == 16 || i == 17 || i == 18 || i == 19 || i == 20) window.alert(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]);
+				if (i == 16 || i == 17 || i == 18 || i == 19 || i == 20) window.alert(txt);*/
+				if((txt.startsWith("Tabella ") || (txt.startsWith("Figura ") && !htmltxt.includes("<img "))) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
-					window.alert(result.data[i-1].values[RM.Data.Attributes.PRIMARY_TEXT]);
-					window.alert(result.data[i-1].values[RM.Data.Attributes.FORMAT]);
-					window.alert(result.data[i-1].values[RM.Data.Attributes.ARTIFACT_TYPE]);
-					captionpairs.push(result.data[i-1],result.data[i]);
+					//window.alert(extractContent(txt));
+					var ii = i-1;
+					var picture = result.data[ii];
+					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
+					//window.alert(result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT])
+					captionpairs.push(result.data[ii],result.data[i]);
 				}
 			}
-			window.alert(captionpairs.length/2);
+			window.alert(captionpairs.length);
 			var j;
 			for(j = 0; j < captionpairs.length; j++)
 			{
 				var tojoin = [];
 				if(j%2)
 				{
+					window.alert("ciclo "+j);
 					tojoin.push(captionpairs[j-1],captionpairs[j]);
 					join(tojoin);
 				}
