@@ -24,7 +24,7 @@ Contract with IBM Corp.
 var initialize = true;
 function version()
 {
-	window.alert("prova 6");
+	window.alert("prova 7");
 	initialize=false;
 }
 
@@ -311,7 +311,7 @@ $(function() {
 					var picture = result.data[ii];
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					window.alert(result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT])
-					captionpairs.push(result.data[ii],result.data[i]);
+					captionpairs.push(result.data[ii].ref,result.data[i].ref);
 				}
 			}
 			window.alert(captionpairs.length);
