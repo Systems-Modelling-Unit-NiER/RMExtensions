@@ -310,6 +310,7 @@ $(function() {
 		captionpairs = [];
 		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.PRIMARY_TEXT], function(result) {
 			var i;
+			println("Inspecting module...");
 			for(i = 0; i < result.data.length; i++)
 			{
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace('\xA0',' ');
@@ -322,7 +323,9 @@ $(function() {
 				}
 			}
 			var j;
+			$("#result").empty();
 			total = Math.round(captionpairs.length/2);
+			println(total+" captions found, joining...");
 			for(j = 0; j < captionpairs.length; j++)
 			{
 				selection = [];
