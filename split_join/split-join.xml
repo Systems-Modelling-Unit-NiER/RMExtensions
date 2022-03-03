@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Module specificationVersion="2.0">
-<ModulePrefs title="Split and Join" height="300" scrolling="true">
+<ModulePrefs title="Split and Join" height="250" scrolling="true">
 	<Require feature="com.ibm.rdm.rm.api"/>
 </ModulePrefs>
 <Content type="html">
