@@ -71,10 +71,10 @@ function constructJoined(artifactAttributes, attrName) {
 	return newText;
 };
 
-function join(artifacts) {
+async function join(artifacts) {
 	return new Promise(resolve1 => {
 		var localselection = artifacts;
-		RM.Data.getAttributes(localselection, function (attrResult) {
+		RM.Data.getAttributes(localselection, async function (attrResult) {
 			if (attrResult.code === RM.OperationResult.OPERATION_OK) {
 				var artifactAttributes = attrResult.data;
 				if (artifactAttributes) {
@@ -88,7 +88,7 @@ function join(artifacts) {
 						keys.push(key);
 						numattr++;
 					}
-					RM.Data.getValueRange(localselection[0], keys, function (valResult)
+					RM.Data.getValueRange(localselection[0], keys, async function(valResult)
 					{
 						var toSave = [];
 						var joinedText = [];
