@@ -24,7 +24,7 @@ Contract with IBM Corp.
 var initialize = true;
 function version()
 {
-	window.alert("prova 5");
+	window.alert("prova 6");
 	initialize=false;
 }
 
@@ -120,47 +120,6 @@ $(function() {
 		});
 	});
 	
-	$("#joinCaptions").on("click", function() {
-		window.alert(2222);
-		if(thisdoc === null)
-		{
-			window.alert("Nessun modulo selezionato. Provare a uscire e rientrare");
-			return;
-		}
-		captionpairs = [];
-		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.PRIMARY_TEXT], function(result) {
-			var i;
-			for(i = 0; i < result.data.length; i++)
-			{
-				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace('\xA0',' ');
-				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
-				/*if (i == 16 || i == 17 || i == 18 || i == 19 || i == 20) window.alert(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]);
-				if (i == 16 || i == 17 || i == 18 || i == 19 || i == 20) window.alert(txt);*/
-				if(((txt.startsWith("Tabella ") && !htmltxt.includes("<table ")) || (txt.startsWith("Figura ") && !htmltxt.includes("<img "))) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
-				{
-					window.alert(extractContent(txt));
-					var ii = i-1;
-					var picture = result.data[ii];
-					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
-					window.alert(result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT])
-					captionpairs.push(result.data[ii],result.data[i]);
-				}
-			}
-			window.alert(captionpairs.length);
-			var j;
-			for(j = 0; j < captionpairs.length; j++)
-			{
-				selection = [];
-				if(j%2)
-				{
-					window.alert("ciclo "+j);
-					selection.push(captionpairs[j-1],captionpairs[j]);
-					$("#joinArtifacts").trigger('click');
-				}
-			}
-		});
-	});
-	
 	$("#splitArtifact").on("click", function() {
 		// Get the necessary information for the split from the initial artifact.
 		RM.Data.getAttributes(selection[0], [RM.Data.Attributes.PRIMARY_TEXT, RM.Data.Attributes.ARTIFACT_TYPE,
@@ -231,6 +190,7 @@ $(function() {
 	});
 	
 	$("#joinArtifacts").on("click", function() {
+		window.alert("join!");
 		var localselection = selection;
 		RM.Data.getAttributes(localselection, function (attrResult) {
 			if (attrResult.code === RM.OperationResult.OPERATION_OK) {
@@ -323,6 +283,47 @@ $(function() {
 						});
 					});
 					
+				}
+			}
+		});
+	});
+	
+	$("#joinCaptions").on("click", function() {
+		window.alert(2222);
+		if(thisdoc === null)
+		{
+			window.alert("Nessun modulo selezionato. Provare a uscire e rientrare");
+			return;
+		}
+		captionpairs = [];
+		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.PRIMARY_TEXT], function(result) {
+			var i;
+			for(i = 0; i < result.data.length; i++)
+			{
+				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace('\xA0',' ');
+				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
+				/*if (i == 16 || i == 17 || i == 18 || i == 19 || i == 20) window.alert(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]);
+				if (i == 16 || i == 17 || i == 18 || i == 19 || i == 20) window.alert(txt);*/
+				if(((txt.startsWith("Tabella ") && !htmltxt.includes("<table ")) || (txt.startsWith("Figura ") && !htmltxt.includes("<img "))) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
+				{
+					window.alert(extractContent(txt));
+					var ii = i-1;
+					var picture = result.data[ii];
+					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
+					window.alert(result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT])
+					captionpairs.push(result.data[ii],result.data[i]);
+				}
+			}
+			window.alert(captionpairs.length);
+			var j;
+			for(j = 0; j < captionpairs.length; j++)
+			{
+				selection = [];
+				if(j%2)
+				{
+					window.alert("ciclo "+j);
+					selection.push(captionpairs[j-1],captionpairs[j]);
+					$("#joinArtifacts").trigger('click');
 				}
 			}
 		});
