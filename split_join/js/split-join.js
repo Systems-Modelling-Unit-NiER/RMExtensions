@@ -101,7 +101,6 @@ async function join(artifacts) {
 						{
 							toSkip[i] = false;
 							// Collect the information for each attribute in turn.
-							window.alert(valResult.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]);
 							attrNames[i] = valResult.data[i].attributeKey;
 							var construct = constructJoined(artifactAttributes,attrNames[i]);
 							if(valResult.data[i].multiValued) construct = construct.replace(/\n/g, ",");
