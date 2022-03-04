@@ -181,7 +181,7 @@ async function join(artifacts) {
 
 $(async function() {
 	
-	//if (initialize==true) version();
+	if (initialize==true) version();
 	
 	// this function is run when the document is ready.
 	
