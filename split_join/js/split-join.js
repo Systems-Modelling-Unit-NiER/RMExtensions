@@ -25,7 +25,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 9");
+	window.alert("prova 10");
 	initialize=false;
 }
 
