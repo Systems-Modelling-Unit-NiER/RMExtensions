@@ -25,7 +25,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 10");
+	window.alert("prova 11");
 	initialize=false;
 }
 
@@ -310,13 +310,13 @@ $(async function() {
 		}
 		captionpairs = [];
 		println("Inspecting module...");
-		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.PRIMARY_TEXT], async function(result) {
+		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.FORMAT, RM.Data.Attributes.PRIMARY_TEXT], async function(result) {
 			var i;
 			for(i = 0; i < result.data.length; i++)
 			{
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace('\xA0',' ');
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
-				if(i<10) window.alert(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name);
+				if(i<10) window.alert(result.data[i].values[RM.Data.Attributes.FORMAT]);
 				if((txt.startsWith("Tabella ") || txt.startsWith("Figura ")) && !(htmltxt.includes("<table ") || htmltxt.includes("<img ")) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
 					var ii = i-1;
