@@ -236,7 +236,7 @@ $(function()
 		 //window.alert(identified_artifacts[i]+" vs "+type);
 		 if(identified_artifacts[i].includes(type)) n=i; //window.alert("found: "+i);
 	 }
-	 if(n!=-1 && item.values[identifiers[n]].length < 1)
+	 if(n!=-1 && item.values[identifiers[n]] == null)
 	 {
 	    	item.values[RM.Data.Attributes.ARTIFACT_TYPE] = "Informazione";
             	toSave.push(item);
