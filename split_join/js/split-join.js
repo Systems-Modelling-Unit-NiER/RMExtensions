@@ -315,7 +315,7 @@ $(async function() {
 			var i;
 			for(i = 0; i < result.data.length; i++)
 			{
-				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace('\xA0',' ').replace(/\n/,'');
+				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace('\xA0',' ').replace(/\n/g,'');
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
 				//if(i<17) window.alert(txt + txt.startsWith("Tabel"));
 				/*if((txt.startsWith("Tabella ") || txt.startsWith("Figura ")) && !(htmltxt.includes("<table ") || htmltxt.includes("<img ")) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
