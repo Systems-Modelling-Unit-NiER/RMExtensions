@@ -303,6 +303,7 @@ $(async function() {
 	
 	$("#joinCaptions").on("click", async function() {
 		counter = 0;
+		total = 0;
 		if(thisdoc === null)
 		{
 			window.alert("Nessun modulo selezionato. Provare a uscire e rientrare");
@@ -325,21 +326,23 @@ $(async function() {
 				}*/
 				if(txt.startsWith("Tabella ") && !htmltxt.includes("<table ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
+					total++;
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
-					captionpairs.push(result.data[ii].ref,result.data[i].ref);
+					if(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].includes("Tabella " + txt.replace( /(^.+\D)(\d+)(\D.+$)/i,'$2'))) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
+					else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
 				}
 			}
 			var j;
 			$("#result").empty();
-			total = Math.round(captionpairs.length/2);
 			println(total+" captions found, joining...");
 			for(j = 0; j < captionpairs.length; j++)
 			{
 				selection = [];
-				if(j%2)
+				if((j+1)%3 == 0)
 				{
-					selection.push(captionpairs[j-1],captionpairs[j]);
+					if(captionpairs[j-2] == null) selection.push(captionpairs[j-1],captionpairs[j]);
+					else selection.push(captionpairs[j-2],captionpairs[j-1],captionpairs[j]);
 					await join(selection);
 					$("#result").empty();
 					println("Joined: "+counter+"/"+total);
