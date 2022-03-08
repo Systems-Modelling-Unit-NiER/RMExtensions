@@ -329,8 +329,8 @@ $(async function() {
 					total++;
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
-					var test = result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].split("Tabella " + txt.match(/\d+/).shift())
-					if(test.length > 1 && !test[1].match(/^\d/)) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
+					var regx = new RegExp("/\\bTabella " + txt.match(/\d+/).shift() + "\\b/");
+					if(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].match(/\bTable 127\b/)) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
 					else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
 				}
 			}
