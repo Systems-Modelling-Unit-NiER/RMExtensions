@@ -1,7 +1,7 @@
 /*
  Licensed Materials - Property of IBM
  attr-links-exp.js
- © Copyright IBM Corporation 2013
+ Â© Copyright IBM Corporation 2013
 
 U.S. Government Users Restricted Rights:  Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp. 
 */
@@ -68,6 +68,7 @@ function fetchAttributes(/*RM.ArtifactRef*/ attrRef) {
 
 				getValue(table, valResult.data[i], attrs, name);
 			}
+			addTableRows(["URI", valResult.data[i].ref.toUri()], table, ["", ""]);
 
 			// Add the table we have constructed to the attributes section of the gadget.
 			$("#attributes").append(table);
