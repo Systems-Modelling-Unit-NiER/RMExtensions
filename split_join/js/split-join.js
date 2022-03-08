@@ -337,7 +337,7 @@ $(async function() {
 			var j;
 			$("#result").empty();
 			println(total+" captions found");
-			if(total > 0) println("joining...");
+			if(total > 0) println("Joining...");
 			for(j = 0; j < captionpairs.length; j++)
 			{
 				selection = [];
