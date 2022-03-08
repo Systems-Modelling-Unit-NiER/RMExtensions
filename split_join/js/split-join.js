@@ -329,10 +329,8 @@ $(async function() {
 					total++;
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
-					window.alert("Tabella " + txt.match(/\d+/).shift());
-					window.alert(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT]);
-					window.alert((result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].includes("Tabella " + txt.match(/\d+/).shift())));
-					if(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].includes("Tabella " + txt.match(/\d+/).shift())) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
+					var test = result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].split("Tabella " + txt.match(/\d+/).shift())
+					if(test.length > 1 && !test[1].match(/^\d/)) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
 					else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
 				}
 			}
