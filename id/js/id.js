@@ -198,6 +198,7 @@ $(function()
       println("FINITO","progress2");
       });}
    });
+   });
    $("#FindInfo").on("click", function() {
 	  
       $("#progress").empty();
