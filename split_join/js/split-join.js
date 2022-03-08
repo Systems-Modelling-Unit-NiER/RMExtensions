@@ -330,7 +330,7 @@ $(async function() {
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					var regx = new RegExp("/\\bTabella " + txt.match(/\d+/).shift() + "\\b/");
-					if(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].match(/\bTable 127\b/)) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
+					if(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].match(regx)) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
 					else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
 				}
 			}
