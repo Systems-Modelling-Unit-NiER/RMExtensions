@@ -317,7 +317,7 @@ $(async function() {
 			{
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace('\xA0',' ');
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
-				if(i<17) window.alert(htmltxt);
+				if(i<17) window.alert(txt);
 				/*if((txt.startsWith("Tabella ") || txt.startsWith("Figura ")) && !(htmltxt.includes("<table ") || htmltxt.includes("<img ")) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
 					var ii = i-1;
