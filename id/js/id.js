@@ -238,7 +238,7 @@ $(function()
 	 }
 	 if(n!=-1 && item.values[identifiers[n]] == null)
 	 {
-	    	item.values[RM.Data.Attributes.ARTIFACT_TYPE] = "Informazione";
+	    	item.values[RM.Data.Attributes.ARTIFACT_TYPE].name = "Informazione";
             	toSave.push(item);
 	 }
       });
