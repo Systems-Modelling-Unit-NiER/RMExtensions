@@ -317,7 +317,7 @@ $(async function() {
 			{
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace('\xA0',' ').replace(/\n/g,'').trim();
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
-				//if(i<5) window.alert(txt + txt.startsWith("Tabel"));
+				if(i<5) window.alert(txt + txt.startsWith("Tabel"));
 				/*if((txt.startsWith("Tabella ") || txt.startsWith("Figura ")) && !(htmltxt.includes("<table ") || htmltxt.includes("<img ")) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
 					var ii = i-1;
@@ -336,7 +336,8 @@ $(async function() {
 			}
 			var j;
 			$("#result").empty();
-			println(total+" captions found, joining...");
+			println(total+" captions found");
+			if(total > 0) println("joining...");
 			for(j = 0; j < captionpairs.length; j++)
 			{
 				selection = [];
