@@ -19,6 +19,7 @@
 				<br/>
 				<hr style="height:1pt; visibility:hidden;" />
 				<button id="RemoveID">Cancella tutti gli identificativi</button>
+				<button id="FindInfo">trova informazioni</button>
    				<br/>
 				<div id="progress" class="info"></div>
 				<div id="progress2" class="info"></div>
