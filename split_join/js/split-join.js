@@ -315,9 +315,9 @@ $(async function() {
 			var i;
 			for(i = 0; i < result.data.length; i++)
 			{
-				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,'').replace(/\xA0/g,' ').trim();
+				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,' ').replace(/\xA0/g,' ').trim();
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
-				if(i<5) window.alert(txt + txt.startsWith("Tabel"));
+				//if(i<5) window.alert(txt + txt.startsWith("Tabel"));
 				/*if((txt.startsWith("Tabella ") || txt.startsWith("Figura ")) && !(htmltxt.includes("<table ") || htmltxt.includes("<img ")) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
 					var ii = i-1;
@@ -330,6 +330,7 @@ $(async function() {
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					var regx = new RegExp("/\\bTabella " + txt.match(/\d+/).shift() + "\\b/");
+					alert("/\\bTabella " + txt.match(/\d+/).shift() + "\\b/");
 					if(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].match(regx)) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
 					else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
 				}
