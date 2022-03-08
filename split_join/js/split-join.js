@@ -331,7 +331,7 @@ $(async function() {
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					window.alert("Tabella " + txt.replace( /(^.+\D)(\d+)(\D.+$)/i,'$2'));
 					window.alert(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT]);
-					window.alert((result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].includes("Tabella " + txt.replace( /(^.+\D)(\d+)(\D.+$)/i,'$2')));
+					window.alert((result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].includes("Tabella " + txt.replace( /(^.+\D)(\d+)(\D.+$)/i,'$2'))));
 					if(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].includes("Tabella " + txt.replace( /(^.+\D)(\d+)(\D.+$)/i,'$2'))) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
 					else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
 				}
