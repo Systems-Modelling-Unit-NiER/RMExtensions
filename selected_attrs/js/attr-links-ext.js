@@ -68,7 +68,7 @@ function fetchAttributes(/*RM.ArtifactRef*/ attrRef) {
 
 				getValue(table, valResult.data[i], attrs, name);
 			}
-			addTableRows(["URI", valResult.data[i].ref.toUri()], table, ["", ""]);
+			addTableRows(["URI", attrRef.toUri()], table, ["", ""]);
 
 			// Add the table we have constructed to the attributes section of the gadget.
 			$("#attributes").append(table);
