@@ -324,7 +324,7 @@ $(async function() {
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					captionpairs.push(result.data[ii].ref,result.data[i].ref);
 				}*/
-				if(txt.startsWith("Tabella ") && !htmltxt.includes("<table ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
+				if(txt.startsWith("Tabella ") && htmltxt.includes("<b>Tabella ") && !htmltxt.includes("<table ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
 					total++;
 					var ii = i-1;
