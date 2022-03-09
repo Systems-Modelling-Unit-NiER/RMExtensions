@@ -330,7 +330,7 @@ $(async function() {
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					var regx = new RegExp("/\\bTabella " + txt.match(/\d+/).shift() + "\\b/");
-					alert("/\\bTabella " + txt.match(/\d+/).shift() + "\\b/" +" "+ result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT] + " " + result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].replace(/\n/g,' ').replace(/\xA0/g,' ').match(regx));
+					console.log("/\\bTabella " + txt.match(/\d+/).shift() + "\\b/" +" "+ result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].replace(/\xA0/g,' ') + " " + result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].replace(/\xA0/g,' ').match(regx));
 					if(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT].replace(/\xA0/g,' ').match(regx)) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
 					else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
 				}
