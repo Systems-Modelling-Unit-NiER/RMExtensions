@@ -317,14 +317,14 @@ $(async function() {
 			{
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,' ').replace(/\xA0/g,' ').trim();
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
-				if(i<27) window.alert(htmltxt);
+				//if(i<27) window.alert(htmltxt);
 				/*if((txt.startsWith("Tabella ") || txt.startsWith("Figura ")) && !(htmltxt.includes("<table ") || htmltxt.includes("<img ")) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					captionpairs.push(result.data[ii].ref,result.data[i].ref);
 				}*/
-				if(txt.startsWith("Tabella ") && htmltxt.includes("<b>Tabella ") && !htmltxt.includes("<table ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
+				if(txt.startsWith("Tabella ") && htmltxt.includes("<b>Tabella") && !htmltxt.includes("<table ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
 					total++;
 					var ii = i-1;
