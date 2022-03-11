@@ -18,7 +18,7 @@
 				<br/>
 				<h5>Additional functions</h5>
 				<button id="joinCaptions">Join all Captions</button><input type="checkbox" id="findReference" name="findReference" value="findReference" style="margin-left:10px;>
-  				<label for="findReference"> Join also previous requirement</label>
+  				<label for="findReference" style="display:inline-block;"> Join also previous requirement</label>
 				<br/>
 				<h3>Information</h3>
 				<div id="result" class="info"></div>
