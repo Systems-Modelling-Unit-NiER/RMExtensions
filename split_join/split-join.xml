@@ -17,7 +17,7 @@
 				<button id="joinArtifacts">Join Artifacts</button><button id="joinCaptions" style="margin-left:10px;">Join all Captions</button>
 				<br/>
     				<hr style="height:1pt; visibility:hidden;" />
-				<button id="splitArtifact">Split Artifact</button><input type="checkbox" id="findReference" name="findReference" value="findReference">
+				<button id="splitArtifact">Split Artifact</button><input type="checkbox" id="findReference" name="findReference" value="findReference" style="margin-left:10px;>
   				<label for="findReference"> Join also previous requirement</label>
 				<br/>
 				<h3>Information</h3>
