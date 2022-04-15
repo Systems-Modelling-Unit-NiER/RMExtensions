@@ -336,13 +336,13 @@ $(async function() {
 					if(extractContent(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
 					else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
 				}
-				if(htmltxt.includes("<table ") && htmltxt.split("</table>")[1].includes("<b>Tabell"))
+				else if(htmltxt.includes("<table ") && htmltxt.split("</table>")[1].includes("<b>Tabella"))
 				{
 					var regx = new RegExp("\\bTabella " + htmltxt.split("</table>")[1].split("<b>Tabell")[1].match(/\d+/).shift() + "\\b");
 					if(extractContent(result.data[i-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference)
 					{
 						total++;
-						else captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
+						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
 					}
 				}
 			}
