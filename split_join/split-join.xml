@@ -21,6 +21,8 @@
 				<br/>
 				<input type="checkbox" id="findReference" name="findReference" value="findReference">
   				<label for="findReference"> Join also previous requirement</label>
+				<input type="checkbox" id="skipInfo" name="skipInfo" value="skipInfo" disabled>
+  				<label for="findReference"> Even if it is an information</label>
 				<br/>
 				<h3>Information</h3>
 				<div id="result" class="info"></div>
