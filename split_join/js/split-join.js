@@ -305,6 +305,9 @@ $(async function() {
 		var findReference;
 		if($("#findReference").prop('checked')) findReference = true;
 		else findReference = false;
+		var skipInfo;
+		if($("#skipInfo").prop('checked')) skipInfo = false;
+		else skipInfo = true;
 		counter = 0;
 		total = 0;
 		if(thisdoc === null)
@@ -339,7 +342,7 @@ $(async function() {
 				else if(htmltxt.includes("<table ") && htmltxt.split("</table>")[1].includes("<b>Tabella"))
 				{
 					var regx = new RegExp("\\bTabella " + htmltxt.split("</table>")[1].split("<b>Tabell")[1].match(/\d+/).shift() + "\\b");
-					if(extractContent(result.data[i-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference)
+					if(extractContent(result.data[i-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[i-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo))
 					{
 						total++;
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
