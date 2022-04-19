@@ -185,6 +185,10 @@ $(async function() {
 	
 	// this function is run when the document is ready.
 	
+	$("#findReference").click(function() {
+  		$("#skipInfo").attr("disabled", !this.checked);
+	});
+	
 	var selection = [];
 	var captionpairs = [];
 	var thisdoc = null;
