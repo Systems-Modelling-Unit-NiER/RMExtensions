@@ -340,7 +340,7 @@ $(async function() {
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					var regx = new RegExp("\\bTabella " + txt.match(/\d+/).shift() + "\\b");
-					if(extractContent(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
+					if(extractContent(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[ii-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo)) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
 					else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
 				}
 				else if(htmltxt.includes("<table ") && htmltxt.split("</table>")[1].includes("<b>Tabella"))
