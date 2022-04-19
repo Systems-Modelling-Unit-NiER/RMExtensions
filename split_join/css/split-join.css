@@ -17,6 +17,6 @@ body {
 	padding: 2px;
 } 
 
-:disabled{
+:disabled + label{
 	color: lightgrey;
 }
