@@ -1,7 +1,7 @@
 /*
  Licensed Materials - Property of IBM
  import-repair.css
-© Copyright IBM Corporation 2014
+Â© Copyright IBM Corporation 2014
 
 U.S. Government Users Restricted Rights:  Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp. 
 */
@@ -16,3 +16,7 @@ body {
 	overflow-y:auto;
 	padding: 2px;
 } 
+
+:disabled{
+	color: lightgrey;
+}
