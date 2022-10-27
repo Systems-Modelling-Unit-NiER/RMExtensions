@@ -226,7 +226,7 @@ $(async function() {
 			result.data.forEach(function(item){
 				if (item.values[RM.Data.Attributes.FORMAT] === RM.Data.Formats.MODULE)
 				{
-					thisdoc = opened;
+					thisdoc = item.values[RM.Data.Attributes.NAME];
 				}
 			});
 		});
@@ -314,6 +314,7 @@ $(async function() {
 		else skipInfo = true;
 		counter = 0;
 		total = 0;
+		window.alert(thisdoc);
 		if(thisdoc === null)
 		{
 			window.alert("Nessun modulo selezionato. Provare a uscire e rientrare");
