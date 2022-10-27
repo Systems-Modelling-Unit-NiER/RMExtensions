@@ -324,6 +324,7 @@ $(async function() {
 		println("Inspecting module...");
 		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.FORMAT, RM.Data.Attributes.PRIMARY_TEXT], async function(result) {
 			var i;
+			window.alert("entrato");
 			for(i = 0; i < result.data.length; i++)
 			{
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,' ').replace(/\xA0/g,' ').trim();
@@ -337,6 +338,7 @@ $(async function() {
 				}*/
 				if(txt.startsWith("Tabella ") && htmltxt.includes("<b>Tabella") && !htmltxt.includes("<table ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
+					window.alert("Tabella, elemento num " + total);
 					total++;
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
@@ -349,6 +351,7 @@ $(async function() {
 					var regx = new RegExp("\\bTabella " + htmltxt.split("</table>")[1].split("<b>Tabell")[1].match(/\d+/).shift() + "\\b");
 					if(extractContent(result.data[i-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[i-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo))
 					{
+						window.alert("Tabella gia vista, elemento num " + total);
 						total++;
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
 					}
