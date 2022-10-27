@@ -7,7 +7,11 @@ U.S. Government Users Restricted Rights:  Use, duplication or disclosure restric
 */
 
 // On selecting an artifact, display all well known attributes and links on it table form.
-
+function extractContent(s) {
+	var span = document.createElement('span');
+	span.innerHTML = s;
+	return span.textContent || span.innerText;
+}
 
 /* Main Operating Function */
 
