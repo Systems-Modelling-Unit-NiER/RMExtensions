@@ -21,8 +21,11 @@ Contract with IBM Corp.
  * 
  */
 
+var sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+
 function alertTimeout(mymsg,mymsecs)
 {
+sleep(mymsecs);
  var myelement = document.createElement("div");
 myelement.setAttribute("style","background-color: grey;color:black; width: 450px;height: 200px;position: absolute;top:0;bottom:0;left:0;right:0;margin:auto;border: 4px solid black;font-family:arial;font-size:25px;font-weight:bold;display: flex; align-items: center; justify-content: center; text-align: center;");
  myelement.innerHTML = mymsg;
@@ -36,7 +39,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 5");
+	window.alert("prova 6");
 	initialize=false;
 }
 
@@ -366,7 +369,7 @@ $(async function() {
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
 					}
 				}
-				alertTimeout("ciclo: " + i,100);
+				alertTimeout("ciclo: " + i,1000);
 			}
 			window.alert("finito for");
 			var j;
