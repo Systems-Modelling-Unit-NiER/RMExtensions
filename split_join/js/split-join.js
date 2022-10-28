@@ -37,7 +37,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 9");
+	window.alert("prova 10");
 	initialize=false;
 }
 
@@ -338,8 +338,9 @@ $(async function() {
 			window.alert("entrato");
 			for(i = 0; i < result.data.length; i++)
 			{
-				if(i>307) await alertTimeout("ciclo: " + i,1000);
+				if(i==316) await alertTimeout("ciclo: " + i,2000);
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,' ').replace(/\xA0/g,' ').trim();
+				if(i==316) await alertTimeout(txt,2000);
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
 				//if(i<27) window.alert(htmltxt);
 				/*if((txt.startsWith("Tabella ") || txt.startsWith("Figura ")) && !(htmltxt.includes("<table ") || htmltxt.includes("<img ")) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
@@ -368,7 +369,7 @@ $(async function() {
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
 					}
 				}
-				if (i<307) await alertTimeout("ciclo fine: " + i,50);
+				if (i<315) await alertTimeout("ciclo fine: " + i,50);
 				else await alertTimeout("ciclo fine: " + i,1000);
 			}
 			window.alert("finito for");
