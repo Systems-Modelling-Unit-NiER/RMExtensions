@@ -352,7 +352,7 @@ $(async function() {
 					total++;
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
-					if(txt.match(/\d+/)==null)
+					if(txt.match(/abella \d+/)==null)
 					{
 						total--;
 						window.alert("Tabella senza numero!\n\n" + txt);
