@@ -355,14 +355,11 @@ $(async function() {
 					if(txt.match(/abella \d+/)==null)
 					{
 						total--;
-						window.alert("Tabella senza numero!\n\n" + txt);
+						window.alert("Table without number, correct and retry\n\n" + txt);
 					}
-					else
-					{
-						var regx = new RegExp("\\bTabella " + txt.match(/\d+/).shift() + "\\b");
-						if(extractContent(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[ii-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo)) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
-						else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
-					}
+					var regx = new RegExp("\\bTabella " + txt.match(/\d+/).shift() + "\\b");
+					if(extractContent(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[ii-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo)) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
+					else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
 				}
 				else if(htmltxt.includes("<table ") && htmltxt.split("</table>")[1].includes("<b>Tabella"))
 				{
