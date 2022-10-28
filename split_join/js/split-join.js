@@ -37,7 +37,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 15");
+	window.alert("prova 16");
 	initialize=false;
 }
 
@@ -358,7 +358,7 @@ $(async function() {
 					if(i==316) await alertTimeout(2,2000);
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					if(i==316) await alertTimeout(3,2000);
-					if(txt.match(/\d+/)==null) throw new Error("Tabella senza numero!\n" + txt);
+					if(txt.match(/\d+/)==null) window.alert("Tabella senza numero!\n" + txt);
 					if(i==316) await alertTimeout(565,2000);
 					var regx = new RegExp("\\bTabella " + txt.match(/\d+/).shift() + "\\b");
 					if(i==316) await alertTimeout(4,2000);
