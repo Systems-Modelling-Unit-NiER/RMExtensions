@@ -324,7 +324,7 @@ $(async function() {
 		println("Inspecting module...");
 		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.FORMAT, RM.Data.Attributes.PRIMARY_TEXT], async function(result) {
 			var i;
-			window.alert("entrato con " + result.data.length);
+			//window.alert("entrato con " + result.data.length);
 			for(i = 0; i < result.data.length; i++)
 			{
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,' ').replace(/\xA0/g,' ').trim();
