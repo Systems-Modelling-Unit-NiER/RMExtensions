@@ -23,7 +23,7 @@ Contract with IBM Corp.
 
 var sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
-function alertTimeout(mymsg,mymsecs)
+async function alertTimeout(mymsg,mymsecs)
 {
 sleep(mymsecs);
  var myelement = document.createElement("div");
