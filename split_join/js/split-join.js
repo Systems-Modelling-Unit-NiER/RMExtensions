@@ -28,18 +28,16 @@ async function alertTimeout(mymsg,mymsecs)
  var myelement = document.createElement("div");
 myelement.setAttribute("style","background-color: grey;color:black; width: 450px;height: 200px;position: absolute;top:0;bottom:0;left:0;right:0;margin:auto;border: 4px solid black;font-family:arial;font-size:25px;font-weight:bold;display: flex; align-items: center; justify-content: center; text-align: center;");
  myelement.innerHTML = mymsg;
- setTimeout(function(){
-  myelement.parentNode.removeChild(myelement);
- },mymsecs);
-await sleep(mymsecs);
  document.body.appendChild(myelement);
+await sleep(400);
+myelement.parentNode.removeChild(myelement);
 }
 
 var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 6");
+	window.alert("prova 7");
 	initialize=false;
 }
 
@@ -369,7 +367,7 @@ $(async function() {
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
 					}
 				}
-				alertTimeout("ciclo: " + i,1000);
+				await alertTimeout("ciclo: " + i,1000);
 			}
 			window.alert("finito for");
 			var j;
