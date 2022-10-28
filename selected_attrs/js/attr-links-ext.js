@@ -73,8 +73,8 @@ function fetchAttributes(/*RM.ArtifactRef*/ attrRef) {
 				getValue(table, valResult.data[i], attrs, name);
 			}
 			addTableRows(["<b>URI", attrRef.toUri()], table, ["", ""]);
-                        addTableRows(["<b>HTML content", "<plaintext>" + attrResult.data[0].values[RM.Data.Attributes.PRIMARY_TEXT]], table, ["\"\" style=\"word-wrap: break-word\"",""]);
-			window.alert("1: " + attrResult.data[0].values[RM.Data.Attributes.PRIMARY_TEXT]);
+                        addTableRows(["<b>HTML content", "<textarea>" + attrResult.data[0].values[RM.Data.Attributes.PRIMARY_TEXT]], table, ["",""]);
+			//window.alert("1: " + attrResult.data[0].values[RM.Data.Attributes.PRIMARY_TEXT]);
 
 			// Add the table we have constructed to the attributes section of the gadget.
 			$("#attributes").append(table);
