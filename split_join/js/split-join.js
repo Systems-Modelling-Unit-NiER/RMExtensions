@@ -29,7 +29,7 @@ async function alertTimeout(mymsg,mymsecs)
 myelement.setAttribute("style","background-color: grey;color:black; width: 450px;height: 200px;position: absolute;top:0;bottom:0;left:0;right:0;margin:auto;border: 4px solid black;font-family:arial;font-size:25px;font-weight:bold;display: flex; align-items: center; justify-content: center; text-align: center;");
  myelement.innerHTML = mymsg;
  document.body.appendChild(myelement);
-await sleep(400);
+await sleep(mymsecs);
 myelement.parentNode.removeChild(myelement);
 }
 
@@ -37,7 +37,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 7");
+	window.alert("prova 8");
 	initialize=false;
 }
 
@@ -338,6 +338,7 @@ $(async function() {
 			window.alert("entrato");
 			for(i = 0; i < result.data.length; i++)
 			{
+				if(1>307) await alertTimeout("ciclo: " + i,1000);
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,' ').replace(/\xA0/g,' ').trim();
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
 				//if(i<27) window.alert(htmltxt);
@@ -367,7 +368,8 @@ $(async function() {
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
 					}
 				}
-				await alertTimeout("ciclo: " + i,1000);
+				if (i<307) await alertTimeout("ciclo fine: " + i,100);
+				else await alertTimeout("ciclo fine: " + i,1000);
 			}
 			window.alert("finito for");
 			var j;
