@@ -324,6 +324,7 @@ $(async function() {
 		println("Inspecting module...");
 		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.FORMAT, RM.Data.Attributes.PRIMARY_TEXT], async function(result) {
 			var i;
+window.alert(txt);
 			//window.alert("entrato con " + result.data.length);
 			for(i = 0; i < result.data.length; i++)
 			{
