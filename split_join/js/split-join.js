@@ -37,7 +37,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 11");
+	window.alert("prova 12");
 	initialize=false;
 }
 
@@ -353,11 +353,16 @@ $(async function() {
 				{
 					//window.alert("Tabella, elemento num " + total);
 					total++;
+					if(i==316) await alertTimeout(1,2000);
 					var ii = i-1;
+					if(i==316) await alertTimeout(2,2000);
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
+					if(i==316) await alertTimeout(3,2000);
 					var regx = new RegExp("\\bTabella " + txt.match(/\d+/).shift() + "\\b");
+					if(i==316) await alertTimeout(4,2000);
 					if(extractContent(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[ii-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo)) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
 					else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
+					if(i==316) await alertTimeout(5,2000);
 				}
 				else if(htmltxt.includes("<table ") && htmltxt.split("</table>")[1].includes("<b>Tabella"))
 				{
@@ -369,8 +374,6 @@ $(async function() {
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
 					}
 				}
-				if (i<315) await alertTimeout("ciclo fine: " + i,50);
-				else await alertTimeout("ciclo fine: " + i,1000);
 			}
 			window.alert("finito for");
 			var j;
