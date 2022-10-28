@@ -366,7 +366,7 @@ $(async function() {
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
 					}
 				}
-				alertTimeout("ciclo: " + i);
+				alertTimeout("ciclo: " + i,100);
 			}
 			window.alert("finito for");
 			var j;
