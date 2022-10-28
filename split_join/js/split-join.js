@@ -37,7 +37,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 8");
+	window.alert("prova 9");
 	initialize=false;
 }
 
@@ -338,7 +338,7 @@ $(async function() {
 			window.alert("entrato");
 			for(i = 0; i < result.data.length; i++)
 			{
-				if(1>307) await alertTimeout("ciclo: " + i,1000);
+				if(i>307) await alertTimeout("ciclo: " + i,1000);
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,' ').replace(/\xA0/g,' ').trim();
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
 				//if(i<27) window.alert(htmltxt);
@@ -368,7 +368,7 @@ $(async function() {
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
 					}
 				}
-				if (i<307) await alertTimeout("ciclo fine: " + i,100);
+				if (i<307) await alertTimeout("ciclo fine: " + i,50);
 				else await alertTimeout("ciclo fine: " + i,1000);
 			}
 			window.alert("finito for");
