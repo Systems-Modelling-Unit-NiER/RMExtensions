@@ -37,7 +37,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 13");
+	window.alert("prova 14");
 	initialize=false;
 }
 
@@ -360,7 +360,9 @@ $(async function() {
 					if(i==316) await alertTimeout(3,2000);
 					try
 					{
-						var regx = new RegExp("\\bTabella " + txt.match(/\d+/).shift() + "\\b");
+						var stri = "\\bTabella " + txt.match(/\d+/).shift() + "\\b";
+						if(i==316) await alertTimeout(33,2000);
+						var regx = new RegExp(stri);
 					}
 					catch(err)
 					{
