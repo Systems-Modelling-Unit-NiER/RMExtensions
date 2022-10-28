@@ -25,12 +25,12 @@ var sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 
 async function alertTimeout(mymsg,mymsecs)
 {
- var myelement = document.createElement("div");
-myelement.setAttribute("style","background-color: grey;color:black; width: 450px;height: 200px;position: absolute;top:0;bottom:0;left:0;right:0;margin:auto;border: 4px solid black;font-family:arial;font-size:25px;font-weight:bold;display: flex; align-items: center; justify-content: center; text-align: center;");
- myelement.innerHTML = mymsg;
- document.body.appendChild(myelement);
-await sleep(mymsecs);
-myelement.parentNode.removeChild(myelement);
+	var myelement = document.createElement("div");
+	myelement.setAttribute("style","background-color: grey;color:black; width: 450px;height: 200px;position: absolute;top:0;bottom:0;left:0;right:0;margin:auto;border: 4px solid black;font-family:arial;font-size:25px;font-weight:bold;display: flex; align-items: center; justify-content: center; text-align: center;");
+	myelement.innerHTML = mymsg;
+	document.body.appendChild(myelement);
+	await sleep(mymsecs);
+	myelement.parentNode.removeChild(myelement);
 }
 
 var initialize = true;
