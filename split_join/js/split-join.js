@@ -25,7 +25,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 1");
+	window.alert("prova 2");
 	initialize=false;
 }
 
@@ -226,7 +226,7 @@ $(async function() {
 			result.data.forEach(function(item){
 				if (item.values[RM.Data.Attributes.FORMAT] === RM.Data.Formats.MODULE)
 				{
-					thisdoc = item.values[RM.Data.Attributes.NAME];
+					thisdoc = opened;
 				}
 			});
 		});
@@ -314,7 +314,7 @@ $(async function() {
 		else skipInfo = true;
 		counter = 0;
 		total = 0;
-		window.alert(thisdoc);
+		window.alert(thisdoc.name);
 		if(thisdoc === null)
 		{
 			window.alert("Nessun modulo selezionato. Provare a uscire e rientrare");
