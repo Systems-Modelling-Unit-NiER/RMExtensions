@@ -25,7 +25,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 15");
+	window.alert("prova 1");
 	initialize=false;
 }
 
@@ -325,7 +325,8 @@ $(async function() {
 		RM.Data.getContentsAttributes(thisdoc, [RM.Data.Attributes.ARTIFACT_TYPE, RM.Data.Attributes.FORMAT, RM.Data.Attributes.PRIMARY_TEXT], async function(result) {
 			var i;
 			window.alert("entrato");
-			window.alert("entrato con " + result.data.length);
+			if(result.data==null) window.alert("nullo");
+			window.alert(result.data.length);
 			for(i = 0; i < result.data.length; i++)
 			{
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,' ').replace(/\xA0/g,' ').trim();
