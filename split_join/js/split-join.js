@@ -37,7 +37,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 12");
+	window.alert("prova 13");
 	initialize=false;
 }
 
@@ -338,7 +338,7 @@ $(async function() {
 			window.alert("entrato");
 			for(i = 0; i < result.data.length; i++)
 			{
-				if(i==316) await alertTimeout("ciclo: " + i,2000);
+				//if(i==316) await alertTimeout("ciclo: " + i,2000);
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,' ').replace(/\xA0/g,' ').trim();
 				if(i==316) await alertTimeout(txt,6000);
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
@@ -358,7 +358,14 @@ $(async function() {
 					if(i==316) await alertTimeout(2,2000);
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					if(i==316) await alertTimeout(3,2000);
-					var regx = new RegExp("\\bTabella " + txt.match(/\d+/).shift() + "\\b");
+					try
+					{
+						var regx = new RegExp("\\bTabella " + txt.match(/\d+/).shift() + "\\b");
+					}
+					catch(err)
+					{
+						throw new Error("Tabella senza numero!\n" + txt);
+					}
 					if(i==316) await alertTimeout(4,2000);
 					if(extractContent(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[ii-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo)) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
 					else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
