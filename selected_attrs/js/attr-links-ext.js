@@ -73,7 +73,7 @@ function fetchAttributes(/*RM.ArtifactRef*/ attrRef) {
 				getValue(table, valResult.data[i], attrs, name);
 			}
 			addTableRows(["<b>URI", attrRef.toUri()], table, ["", ""]);
-                        addTableRows(["<b>HTML content", "<textarea>" + extractContent(attrResult.data[0].values[RM.Data.Attributes.PRIMARY_TEXT])], table, ["", ""]);
+                        addTableRows(["<b>HTML content", "<plaintext>" + extractContent(attrResult.data[0].values[RM.Data.Attributes.PRIMARY_TEXT])], table, ["", ""]);
 			//window.alert(attrRef.getWrappedResourceURI());
 
 			// Add the table we have constructed to the attributes section of the gadget.
