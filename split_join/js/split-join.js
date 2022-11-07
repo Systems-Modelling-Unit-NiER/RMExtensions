@@ -354,7 +354,6 @@ $(async function() {
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					if(txt.match(/abella \d+/)==null)
 					{
-						total--;
 						window.alert("Table without number, correct and retry\n\n" + txt);
 					}
 					var regx = new RegExp("\\bTabella " + txt.match(/\d+/).shift() + "\\b");
@@ -368,6 +367,20 @@ $(async function() {
 					{
 						total++;
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
+					}
+				}
+				else if(htmltxt.includes("<img ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
+				{
+					var ii = i-1;
+					if(txt.match(/igura \d+/)==null)
+					{
+						window.alert("Figure without number, correct and retry\n\n" + txt);
+					}
+					var regx = new RegExp("\\bFigura " + txt.match(/\d+/).shift() + "\\b");
+					if(extractContent(result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[ii].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo))
+					{
+						total++;
+						captionpairs.push(null, result.data[ii].ref,result.data[i].ref);
 					}
 				}
 			}
