@@ -1,10 +1,3 @@
-/*
- Licensed Materials - Property of IBM
- import-repair.js
- © Copyright IBM Corporation 2014
-U.S. Government Users Restricted Rights:  Use, duplication or disclosure restricted by GSA ADP Schedule 
-Contract with IBM Corp. 
-*/
 
 /* Given a module with artifacts containing text content either join selected artifacts together into a 
  * single artifact, or split a single artifact with multiple paragraphs into multiple artifacts in the 
@@ -347,7 +340,7 @@ $(async function() {
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					captionpairs.push(result.data[ii].ref,result.data[i].ref);
 				}*/
-				if(txt.startsWith("Tabella ") && htmltxt.includes("<b>Tabella") && !htmltxt.includes("<table ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
+				if(txt.startsWith("Tabella ") && (htmltxt.includes("<b>Tabella") || htmltxt.includes("<b><span>Tabella")) && !htmltxt.includes("<table ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
 					total++;
 					var ii = i-1;
@@ -363,6 +356,15 @@ $(async function() {
 				else if(htmltxt.includes("<table ") && htmltxt.split("</table>")[1].includes("<b>Tabella"))
 				{
 					var regx = new RegExp("\\bTabella " + htmltxt.split("</table>")[1].split("<b>Tabell")[1].match(/\d+/).shift() + "\\b");
+					if(extractContent(result.data[i-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[i-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo))
+					{
+						total++;
+						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
+					}
+				}
+				else if(htmltxt.includes("<table ") && htmltxt.split("</table>")[1].includes("<b><span>Tabella"))
+				{
+					var regx = new RegExp("\\bTabella " + htmltxt.split("</table>")[1].split("<b><span>Tabell")[1].match(/\d+/).shift() + "\\b");
 					if(extractContent(result.data[i-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[i-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo))
 					{
 						total++;
