@@ -331,7 +331,7 @@ $(async function() {
 			//window.alert("entrato");
 			for(i = 0; i < result.data.length; i++)
 			{
-				//if(i==316) await alertTimeout("ciclo: " + i,2000);
+				if(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Requisito")) continue;
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,' ').replace(/\xA0/g,' ').trim();
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
 				/*if((txt.startsWith("Tabella ") || txt.startsWith("Figura ")) && !(htmltxt.includes("<table ") || htmltxt.includes("<img ")) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
