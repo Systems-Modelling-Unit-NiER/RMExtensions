@@ -16,7 +16,7 @@ function extractContent(s) {
 /* Main Operating Function */
 
 $(function() {
-	window.alert("!6de!");
+	window.alert("!6dde!");
 	// this function is run when the document is ready.
 	
 	RM.Event.subscribe(RM.Event.ARTIFACT_SELECTED, function(selected) {
