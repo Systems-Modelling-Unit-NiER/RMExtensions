@@ -16,7 +16,7 @@ function extractContent(s) {
 /* Main Operating Function */
 
 $(function() {
-	window.alert("!6e!");
+	window.alert("!6de!");
 	// this function is run when the document is ready.
 	
 	RM.Event.subscribe(RM.Event.ARTIFACT_SELECTED, function(selected) {
@@ -57,7 +57,7 @@ function fetchAttributes(/*RM.ArtifactRef*/ attrRef) {
 		for (var key in attrs.values){
 			keys.push(key);
 		}
-		
+		window.alert(attrResult.data[0].values[RM.Data.Attributes.ARTIFACT_TYPE].name);
 		RM.Data.getValueRange(attrRef, keys, function (valResult) {
 			// Retrieve the value range for attributes so that opaque reference
 			// objects can be identified and further queried to extract
@@ -65,7 +65,6 @@ function fetchAttributes(/*RM.ArtifactRef*/ attrRef) {
 			if (valResult.code != RM.OperationResult.OPERATION_OK){
 				return;
 			}
-			window.alert(valResult.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name);
 			for (var i = 0; i < keys.length; i++) {
 				// Get and display the information for each attribute in turn.
 				var key = valResult.data[i].attributeKey;
