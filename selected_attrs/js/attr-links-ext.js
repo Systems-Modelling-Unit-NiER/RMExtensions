@@ -16,7 +16,7 @@ function extractContent(s) {
 /* Main Operating Function */
 
 $(function() {
-	window.alert("!6!");
+	window.alert("!6e!");
 	// this function is run when the document is ready.
 	
 	RM.Event.subscribe(RM.Event.ARTIFACT_SELECTED, function(selected) {
@@ -65,7 +65,7 @@ function fetchAttributes(/*RM.ArtifactRef*/ attrRef) {
 			if (valResult.code != RM.OperationResult.OPERATION_OK){
 				return;
 			}
-			window.alert(valResult.data[i].data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name);
+			window.alert(valResult.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name);
 			for (var i = 0; i < keys.length; i++) {
 				// Get and display the information for each attribute in turn.
 				var key = valResult.data[i].attributeKey;
