@@ -69,7 +69,7 @@ function fetchAttributes(/*RM.ArtifactRef*/ attrRef) {
 				var key = valResult.data[i].attributeKey;
 				
 				var name = getPrintableWellKnownAttribute(key);
-
+				print window.alert(name);
 				getValue(table, valResult.data[i], attrs, name);
 			}
 			addTableRows(["<b>URI", attrRef.toUri()], table, ["", ""]);
