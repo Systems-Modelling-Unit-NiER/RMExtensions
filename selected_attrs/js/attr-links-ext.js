@@ -16,7 +16,7 @@ function extractContent(s) {
 /* Main Operating Function */
 
 $(function() {
-	window.alert("!6dcde!");
+	window.alert("!!");
 	// this function is run when the document is ready.
 	
 	RM.Event.subscribe(RM.Event.ARTIFACT_SELECTED, function(selected) {
@@ -56,7 +56,7 @@ function fetchAttributes(/*RM.ArtifactRef*/ attrRef) {
 		var keys = [];
 		for (var key in attrs.values){
 			keys.push(key);
-			window.alert(key.name)
+			window.alert(key);
 		}
 		
 		RM.Data.getValueRange(attrRef, keys, function (valResult) {
