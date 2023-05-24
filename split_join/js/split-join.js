@@ -30,7 +30,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 16");
+	window.alert("prova 1");
 	initialize=false;
 }
 
@@ -186,7 +186,7 @@ async function join(artifacts) {
 
 $(async function() {
 	
-	//if (initialize==true) version();
+	if (initialize==true) version();
 	
 	// this function is run when the document is ready.
 	
@@ -331,7 +331,9 @@ $(async function() {
 			//window.alert("entrato");
 			for(i = 0; i < result.data.length; i++)
 			{
-				if(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.startsWith("Requi")) continue;
+				window.alert(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name);
+				window.alert(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.startsWith("Requi"));
+				/*
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,' ').replace(/\xA0/g,' ').trim();
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
 				/*if((txt.startsWith("Tabella ") || txt.startsWith("Figura ")) && !(htmltxt.includes("<table ") || htmltxt.includes("<img ")) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
@@ -339,7 +341,7 @@ $(async function() {
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					captionpairs.push(result.data[ii].ref,result.data[i].ref);
-				}*/
+				}*//*
 				if(txt.startsWith("Tabella ") && (htmltxt.includes("<b>Tabella") || htmltxt.includes("<b><span>Tabella")) && !htmltxt.includes("<table ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
 					total++;
@@ -384,13 +386,14 @@ $(async function() {
 						total++;
 						captionpairs.push(null, result.data[ii].ref,result.data[i].ref);
 					}
-				}
+				}*/
 			}
 			//window.alert("finito for");
 			var j;
 			$("#result").empty();
 			println(total+" captions found");
 			if(total > 0) println("Joining...");
+			/*
 			for(j = 0; j < captionpairs.length; j++)
 			{
 				selection = [];
@@ -402,7 +405,7 @@ $(async function() {
 					$("#result").empty();
 					println("Joined: "+counter+"/"+total);
 				}
-			}
+			}*/
 		});
 	});
 	
