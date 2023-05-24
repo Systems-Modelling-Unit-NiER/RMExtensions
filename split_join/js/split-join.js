@@ -30,7 +30,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 1");
+	window.alert("prova 2");
 	initialize=false;
 }
 
@@ -331,9 +331,7 @@ $(async function() {
 			//window.alert("entrato");
 			for(i = 0; i < result.data.length; i++)
 			{
-				window.alert(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name);
-				window.alert(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.startsWith("Requi"));
-				/*
+				if(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.startsWith("Requi")) continue;
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,' ').replace(/\xA0/g,' ').trim();
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
 				/*if((txt.startsWith("Tabella ") || txt.startsWith("Figura ")) && !(htmltxt.includes("<table ") || htmltxt.includes("<img ")) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
@@ -341,7 +339,7 @@ $(async function() {
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ") && !result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					captionpairs.push(result.data[ii].ref,result.data[i].ref);
-				}*//*
+				}*/
 				if(txt.startsWith("Tabella ") && (htmltxt.includes("<b>Tabella") || htmltxt.includes("<b><span>Tabella")) && !htmltxt.includes("<table ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
 					total++;
@@ -355,7 +353,7 @@ $(async function() {
 					if(extractContent(result.data[ii-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[ii-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo)) captionpairs.push(result.data[ii-1].ref, result.data[ii].ref,result.data[i].ref);
 					else captionpairs.push(null,result.data[ii].ref,result.data[i].ref);
 				}
-				else if(htmltxt.includes("<table ") && htmltxt.split("</table>")[1].includes("<b>Tabella"))
+				else if(htmltxt.split(">")[1].includes("<table ") && htmltxt.split("</table>")[1].includes("<b>Tabella"))
 				{
 					var regx = new RegExp("\\bTabella " + htmltxt.split("</table>")[1].split("<b>Tabell")[1].match(/\d+/).shift() + "\\b");
 					if(extractContent(result.data[i-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[i-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo))
@@ -364,7 +362,7 @@ $(async function() {
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
 					}
 				}
-				else if(htmltxt.includes("<table ") && htmltxt.split("</table>")[1].includes("<b><span>Tabella"))
+				else if(htmltxt.split(">")[1].includes("<table ") && htmltxt.split("</table>")[1].includes("<b><span>Tabella"))
 				{
 					var regx = new RegExp("\\bTabella " + htmltxt.split("</table>")[1].split("<b><span>Tabell")[1].match(/\d+/).shift() + "\\b");
 					if(extractContent(result.data[i-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[i-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo))
@@ -386,14 +384,13 @@ $(async function() {
 						total++;
 						captionpairs.push(null, result.data[ii].ref,result.data[i].ref);
 					}
-				}*/
+				}
 			}
 			//window.alert("finito for");
 			var j;
 			$("#result").empty();
 			println(total+" captions found");
 			if(total > 0) println("Joining...");
-			/*
 			for(j = 0; j < captionpairs.length; j++)
 			{
 				selection = [];
@@ -405,7 +402,7 @@ $(async function() {
 					$("#result").empty();
 					println("Joined: "+counter+"/"+total);
 				}
-			}*/
+			}
 		});
 	});
 	
