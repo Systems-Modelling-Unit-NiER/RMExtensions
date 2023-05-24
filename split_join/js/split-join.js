@@ -30,7 +30,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 2");
+	window.alert("prova 3");
 	initialize=false;
 }
 
@@ -331,7 +331,10 @@ $(async function() {
 			//window.alert("entrato");
 			for(i = 0; i < result.data.length; i++)
 			{
-				if(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.startsWith("Requi")) continue;
+				if(i>0)
+				{
+					if(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.startsWith("Requi") && result.data[i-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.startsWith("Requi")) continue;
+				}
 				var txt = extractContent(result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\n/g,' ').replace(/\xA0/g,' ').trim();
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
 				/*if((txt.startsWith("Tabella ") || txt.startsWith("Figura ")) && !(htmltxt.includes("<table ") || htmltxt.includes("<img ")) && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
@@ -391,6 +394,8 @@ $(async function() {
 			$("#result").empty();
 			println(total+" captions found");
 			if(total > 0) println("Joining...");
+			if(confirm("Press a button!"))
+			{
 			for(j = 0; j < captionpairs.length; j++)
 			{
 				selection = [];
@@ -402,6 +407,7 @@ $(async function() {
 					$("#result").empty();
 					println("Joined: "+counter+"/"+total);
 				}
+			}
 			}
 		});
 	});
