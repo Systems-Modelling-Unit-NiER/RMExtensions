@@ -30,7 +30,7 @@ var initialize = true;
 var counter = 0;
 function version()
 {
-	window.alert("prova 3");
+	window.alert("prova 4");
 	initialize=false;
 }
 
@@ -394,7 +394,7 @@ $(async function() {
 			$("#result").empty();
 			println(total+" captions found");
 			if(total > 0) println("Joining...");
-			if(confirm("Press a button!"))
+			if(confirm("Press a button! "+total))
 			{
 			for(j = 0; j < captionpairs.length; j++)
 			{
