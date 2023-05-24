@@ -186,7 +186,7 @@ async function join(artifacts) {
 
 $(async function() {
 	
-	if (initialize==true) version();
+	// if (initialize==true) version();
 	
 	// this function is run when the document is ready.
 	
@@ -394,8 +394,6 @@ $(async function() {
 			$("#result").empty();
 			println(total+" captions found");
 			if(total > 0) println("Joining...");
-			if(confirm("Press a button! "+total))
-			{
 			for(j = 0; j < captionpairs.length; j++)
 			{
 				selection = [];
@@ -407,7 +405,6 @@ $(async function() {
 					$("#result").empty();
 					println("Joined: "+counter+"/"+total);
 				}
-			}
 			}
 		});
 	});
