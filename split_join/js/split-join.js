@@ -374,7 +374,7 @@ $(async function() {
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
 					}
 				}
-				else if(htmltxt.includes("<img ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
+				/*else if(htmltxt.includes("<img ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
 					var ii = i-1;
 					if(txt.match(/igura \d+/)==null)
@@ -387,7 +387,7 @@ $(async function() {
 						total++;
 						captionpairs.push(null, result.data[ii].ref,result.data[i].ref);
 					}
-				}
+				}*/
 			}
 			//window.alert("finito for");
 			var j;
