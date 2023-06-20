@@ -197,7 +197,8 @@ $(async function() {
 	var selection = [];
 	var captionpairs = [];
 	var thisdoc = null;
-	var total = 0;
+	var totalt = 0;
+	var totalf = 0;
 	
 	// Tracks whether or not to update selection messages while an operation is performed.  Otherwise,
 	// as the selection changed with the creation or deletion of artifacts the information displayed in
@@ -318,7 +319,8 @@ $(async function() {
 		if($("#skipInfo").prop('checked')) skipInfo = false;
 		else skipInfo = true;
 		counter = 0;
-		total = 0;
+		totalt = 0;
+		totalf = 0;
 		if(thisdoc === null)
 		{
 			window.alert("Nessun modulo selezionato. Provare a uscire e rientrare");
@@ -339,7 +341,7 @@ $(async function() {
 				var htmltxt = result.data[i].values[RM.Data.Attributes.PRIMARY_TEXT];
 				if(txt.startsWith("Tabella ") && (htmltxt.includes("<b>Tabella") || htmltxt.includes("<b><span>Tabella")) && !htmltxt.includes("<table ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
-					total++;
+					totalt++;
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<table ")) ii--;
 					if(txt.match(/abella \d+/)==null)
@@ -355,7 +357,7 @@ $(async function() {
 					var regx = new RegExp("\\bTabella " + htmltxt.split("</table>")[1].split("<b>Tabell")[1].match(/\d+/).shift() + "\\b");
 					if(extractContent(result.data[i-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[i-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo))
 					{
-						total++;
+						totalt++;
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
 					}
 				}
@@ -364,13 +366,13 @@ $(async function() {
 					var regx = new RegExp("\\bTabella " + htmltxt.split("</table>")[1].split("<b><span>Tabell")[1].match(/\d+/).shift() + "\\b");
 					if(extractContent(result.data[i-1].values[RM.Data.Attributes.PRIMARY_TEXT]).replace(/\xA0/g,' ').match(regx) && findReference && ((!(result.data[i-1].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Informazione")) && skipInfo) || !skipInfo))
 					{
-						total++;
+						totalt++;
 						captionpairs.push(null,result.data[i-1].ref,result.data[i].ref);
 					}
 				}
 				else if(txt.startsWith("Figura ") && (htmltxt.includes("<b>Figura") || htmltxt.includes("<b><span>Figura")) && !htmltxt.includes("<img ") && !(result.data[i].values[RM.Data.Attributes.ARTIFACT_TYPE].name.includes("Intestazione")))
 				{
-					total++;
+					totalf++;
 					var ii = i-1;
 					while(!result.data[ii].values[RM.Data.Attributes.PRIMARY_TEXT].includes("<img ")) ii--;
 					if(txt.match(/igura \d+/)==null)
@@ -385,8 +387,9 @@ $(async function() {
 			//window.alert("finito for");
 			var j;
 			$("#result").empty();
-			println(total+" captions found");
-			if(total > 0) println("Joining...");
+			println(totalt+" table captions found");
+			println(totalf+" figure captions found");
+			if(totalt > 0 || totalf > 0) println("Joining...");
 			for(j = 0; j < captionpairs.length; j++)
 			{
 				selection = [];
@@ -396,7 +399,7 @@ $(async function() {
 					else selection.push(captionpairs[j-2],captionpairs[j-1],captionpairs[j]);
 					await join(selection);
 					$("#result").empty();
-					println("Joined: "+counter+"/"+total);
+					println("Joined: "+counter+"/"+(totalt+totalf));
 				}
 			}
 		});
